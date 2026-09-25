@@ -1,0 +1,19 @@
+{
+  "name": "journalos",
+  "version": "1.0.0",
+  "description": "An advanced Agentic AI Journaling System built with Google Cloud ADK (Agent Development Kit), Vertex AI, and Gemini (`gemini-2.5-flash`). JournalOS acts as a personal reflection coach, goal accountability partner, and mental wellness companion by dynamically adapting across 19 journaling methodologies.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}
