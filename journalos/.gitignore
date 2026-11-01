@@ -211,3 +211,9 @@ tools/a2a-inspector/
 *.pem
 *-key.json
 credentials*.json
+
+
+# Privacy protection: Never commit user journal vaults, runtime configs, or logs
+data/
+logs/
+*.jsonl

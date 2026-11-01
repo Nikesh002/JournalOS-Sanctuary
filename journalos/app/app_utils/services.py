@@ -14,9 +14,8 @@
 
 """Process-wide ADK session/artifact/memory services shared by every serving surface.
 
-Registered under ``shared://`` so the ADK web routes, the A2A path, and the
-reasoning_engine adapter share one instance: a session created on any surface
-is visible to the others.
+Defaults to zero-cost in-memory ADK services (with persistent Google Sheets + JSON storage
+handled by `app.sheets_storage`), while still supporting Vertex AI services when explicitly configured.
 """
 
 from __future__ import annotations
@@ -49,8 +48,6 @@ def get_session_service():
 
         return VertexAiSessionService(
             project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
-            # Runtime-injected agent-engine region, not GOOGLE_CLOUD_LOCATION
-            # (which agent.py pins to "global").
             location=os.environ.get("GOOGLE_CLOUD_AGENT_ENGINE_LOCATION")
             or os.environ.get("GOOGLE_CLOUD_LOCATION"),
             agent_engine_id=agent_engine_id,
@@ -62,21 +59,20 @@ def get_session_service():
 
 @functools.cache
 def get_memory_service():
-    """Process-wide memory service: VertexAiMemoryBankService when configured/deployed, else in-memory."""
+    """Process-wide memory service: in-memory by default (persistent memories live in Google Sheets), or Vertex AI if configured."""
     if uri := os.environ.get("MEMORY_SERVICE_URI"):
-        from google.adk.cli.utils.service_factory import create_memory_service_from_options
+        from google.adk.cli.utils.service_factory import (
+            create_memory_service_from_options,
+        )
 
         return create_memory_service_from_options(
             base_dir=_AGENT_DIR, memory_service_uri=uri
         )
-    agent_engine_id = os.environ.get(
-        "GOOGLE_CLOUD_AGENT_ENGINE_ID", "890874898358992896"
-    )
-    if agent_engine_id:
+    if agent_engine_id := os.environ.get("GOOGLE_CLOUD_AGENT_ENGINE_ID"):
         from google.adk.memory import VertexAiMemoryBankService
 
         return VertexAiMemoryBankService(
-            project=os.environ.get("GOOGLE_CLOUD_PROJECT") or "qwiklabs-gcp-02-f96e03251dae",
+            project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
             location=os.environ.get("GOOGLE_CLOUD_AGENT_ENGINE_LOCATION")
             or os.environ.get("GOOGLE_CLOUD_LOCATION")
             or "us-east1",
