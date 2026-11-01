@@ -6,6 +6,20 @@
 
 **JournalOS Sanctuary** is a **100% free, open-source, privacy-first Mindful AI Journaling Web Application**. It combines an empathetic **Companion Counsellor** persona, **19 evidence-based journaling frameworks**, **rate-limit-free animated SVG moodscapes**, **client-side AES-256-GCM encryption**, and **Google Sheets / local vault persistence**.
 
+![JournalOS Animated Demo](assets/demo.gif)
+
+---
+
+## 📸 Visual Tour of Updated Codebase
+
+| View | Screenshot |
+| :--- | :--- |
+| **1. First-Time Sanctuary Onboarding** *(Dynamic `user_name` & optional AES-256 PIN)* | ![First-Time Setup](assets/screenshot_onboarding.png) |
+| **2. Companion Coach & Uncropped Multi-Line Moodscape** *(19 Frameworks + `NOW` badge + Emotion Pills)* | ![Companion Coach](assets/screenshot_coach_moodscape.png) |
+| **3. My Entries & Trends GUI Dashboard** *(KPI Tiles + Encrypted Reflection Badges)* | ![Entries & Trends](assets/screenshot_entries_trends.png) |
+| **4. Insights, Distribution Bars & Google Calendar Studio** *(Progress Bars + `.ics` / Google Calendar)* | ![Insights & Calendar](assets/screenshot_insights_calendar.png) |
+| **5. Zero-Trust Privacy, `VAULT_ENC:v1` & Redacted Logs** *(Persistent API Keys + `[REDACTED_FOR_PRIVACY]`)* | ![Privacy & Logs](assets/screenshot_privacy_security.png) |
+
 ---
 
 ## 🧩 System Architecture
@@ -40,6 +54,13 @@ journalos/
 │   ├── firestore_tools.py    # 19-methodology prompt engine & multi-line animated SVG moodscapes
 │   ├── logger_utils.py       # Rotating file + JSONL logger with strict PII redaction
 │   └── sheets_storage.py     # Encrypted vault storage, Google Sheets sync & streak analytics
+├── assets/
+│   ├── demo.gif              # Animated multi-frame walkthrough of the updated web app
+│   ├── screenshot_onboarding.png
+│   ├── screenshot_coach_moodscape.png
+│   ├── screenshot_entries_trends.png
+│   ├── screenshot_insights_calendar.png
+│   └── screenshot_privacy_security.png
 ├── frontend/
 │   ├── main.py               # Dual-mode HTTP/FastAPI server (runs with zero pip dependencies)
 │   └── static/
