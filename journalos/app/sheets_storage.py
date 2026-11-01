@@ -740,6 +740,71 @@ def _is_noise_entry(e: dict[str, Any]) -> bool:
     return False
 
 
+def _deduplicate_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Merges duplicate entries that share identical content into a single row with combined tags & extra columns."""
+    by_content: dict[str, dict[str, Any]] = {}
+    ordered_keys: list[str] = []
+
+    for e in entries:
+        if _is_noise_entry(e):
+            continue
+        norm_content = " ".join(str(e.get("content", "")).strip().split())
+        key = norm_content if norm_content else str(e.get("entry_id", ""))
+        if key not in by_content:
+            cloned = dict(e)
+            raw_tags = cloned.get("tags", [])
+            if isinstance(raw_tags, str):
+                try:
+                    raw_tags = json.loads(raw_tags)
+                except Exception:
+                    raw_tags = [t.strip() for t in raw_tags.split(",") if t.strip()]
+            cloned["tags"] = list(dict.fromkeys(str(t).strip() for t in (raw_tags or []) if str(t).strip()))
+            cloned.setdefault("updated_at", cloned.get("timestamp", ""))
+            cloned.setdefault("coach_insight", "")
+            by_content[key] = cloned
+            ordered_keys.append(key)
+        else:
+            existing = by_content[key]
+            # Merge tags without duplicates
+            raw_tags = e.get("tags", [])
+            if isinstance(raw_tags, str):
+                try:
+                    raw_tags = json.loads(raw_tags)
+                except Exception:
+                    raw_tags = [t.strip() for t in raw_tags.split(",") if t.strip()]
+            merged_tags = list(
+                dict.fromkeys(
+                    existing.get("tags", [])
+                    + [str(t).strip() for t in (raw_tags or []) if str(t).strip()]
+                )
+            )
+            existing["tags"] = merged_tags
+
+            # Keep fuller title
+            if len(str(e.get("title", ""))) > len(str(existing.get("title", ""))):
+                existing["title"] = e["title"]
+
+            # Prefer specific mood over generic "Reflective"
+            if existing.get("mood") in ("", "Reflective") and e.get("mood") not in ("", "Reflective", None):
+                existing["mood"] = e["mood"]
+
+            # Keep earliest entry_id/timestamp as primary and latest timestamp as updated_at
+            ts_existing = str(existing.get("timestamp", ""))
+            ts_new = str(e.get("timestamp", ""))
+            if ts_new and ts_existing:
+                if ts_new < ts_existing:
+                    existing["updated_at"] = ts_existing
+                    existing["timestamp"] = ts_new
+                    existing["entry_id"] = e.get("entry_id", existing["entry_id"])
+                elif ts_new > str(existing.get("updated_at", "")):
+                    existing["updated_at"] = ts_new
+
+            if e.get("coach_insight") and not existing.get("coach_insight"):
+                existing["coach_insight"] = e["coach_insight"]
+
+    return [by_content[k] for k in ordered_keys]
+
+
 def _load_local_store() -> dict[str, Any]:
     store_file, _ = _get_vault_paths()
     if not store_file.exists():
@@ -747,9 +812,7 @@ def _load_local_store() -> dict[str, Any]:
         if STORE_FILE.exists():
             try:
                 data = json.loads(STORE_FILE.read_text(encoding="utf-8"))
-                cleaned = [
-                    e for e in data.get("entries", []) if not _is_noise_entry(e)
-                ]
+                cleaned = _deduplicate_entries(data.get("entries", []))
                 data["entries"] = cleaned or DEFAULT_SEED_DATA["entries"]
                 return data
             except Exception:
@@ -763,7 +826,7 @@ def _load_local_store() -> dict[str, Any]:
         for k in ("entries", "memories", "habits"):
             if k not in data or not isinstance(data[k], list):
                 data[k] = DEFAULT_SEED_DATA[k]
-        cleaned_entries = [e for e in data["entries"] if not _is_noise_entry(e)]
+        cleaned_entries = _deduplicate_entries(data["entries"])
         if len(cleaned_entries) != len(data["entries"]):
             data["entries"] = cleaned_entries or DEFAULT_SEED_DATA["entries"]
             _save_local_store(data)
@@ -842,9 +905,7 @@ def sync_from_google_sheets() -> dict[str, Any]:
             }
         store = _load_local_store()
         if isinstance(data.get("entries"), list) and data["entries"]:
-            store["entries"] = [
-                e for e in data["entries"] if not _is_noise_entry(e)
-            ]
+            store["entries"] = _deduplicate_entries(data["entries"])
         if isinstance(data.get("memories"), list) and data["memories"]:
             store["memories"] = data["memories"]
         if isinstance(data.get("habits"), list) and data["habits"]:
@@ -882,11 +943,11 @@ def store_add_entry(
     methodology: str = "Reflective Journaling",
     mood: str = "Grounded & Serene",
     tags: list[str] | None = None,
+    coach_insight: str = "",
     sync_sheets: bool = True,
 ) -> dict[str, Any]:
     store = _load_local_store()
     now_iso = datetime.datetime.now().astimezone().isoformat()
-    entry_id = f"entry-{int(time.time() * 1000)}"
     clean_tags = [str(t).strip() for t in (tags or []) if str(t).strip()]
     is_encrypted = str(content).startswith("ENC:v1:")
     word_count = (
@@ -894,22 +955,59 @@ def store_add_entry(
         if (is_encrypted and clean_tags and clean_tags[0].startswith("wc:"))
         else len((content or "").split())
     )
+    visible_tags = list(dict.fromkeys(t for t in clean_tags if not t.startswith("wc:")))
+    norm_new = " ".join((content or "").strip().split())
 
-    entry_data = {
-        "entry_id": entry_id,
-        "title": title.strip() or "Mindful Reflection",
-        "content": content.strip(),
-        "methodology": methodology.strip() or "Reflective Journaling",
-        "mood": mood.strip() or "Grounded & Serene",
-        "tags": [t for t in clean_tags if not t.startswith("wc:")],
-        "timestamp": now_iso,
-        "word_count": word_count,
-        "encrypted": is_encrypted,
-    }
+    # Upsert check: if an entry with identical content already exists, update its columns in-place
+    # instead of creating a duplicate text-heavy row!
+    existing_entry = None
+    if norm_new:
+        for e in store.get("entries", []):
+            norm_existing = " ".join(str(e.get("content", "")).strip().split())
+            if norm_existing == norm_new:
+                existing_entry = e
+                break
 
-    if not _is_noise_entry(entry_data):
-        store["entries"].insert(0, entry_data)
-        _save_local_store(store)
+    if existing_entry is not None:
+        entry_id = existing_entry["entry_id"]
+        merged_tags = list(
+            dict.fromkeys((existing_entry.get("tags") or []) + visible_tags)
+        )
+        existing_entry["tags"] = merged_tags
+        if len(title.strip()) > len(str(existing_entry.get("title", ""))):
+            existing_entry["title"] = title.strip()
+        if mood.strip() and (
+            existing_entry.get("mood") in ("", "Reflective")
+            or mood.strip() != "Reflective"
+        ):
+            existing_entry["mood"] = mood.strip()
+        existing_entry["methodology"] = (
+            methodology.strip() or existing_entry.get("methodology", "Reflective Journaling")
+        )
+        existing_entry["updated_at"] = now_iso
+        if coach_insight.strip():
+            existing_entry["coach_insight"] = coach_insight.strip()
+        entry_data = existing_entry
+        if not _is_noise_entry(entry_data):
+            _save_local_store(store)
+    else:
+        entry_id = f"entry-{int(time.time() * 1000)}"
+        entry_data = {
+            "entry_id": entry_id,
+            "title": title.strip() or "Mindful Reflection",
+            "content": content.strip(),
+            "methodology": methodology.strip() or "Reflective Journaling",
+            "mood": mood.strip() or "Grounded & Serene",
+            "tags": visible_tags,
+            "timestamp": now_iso,
+            "updated_at": now_iso,
+            "coach_insight": coach_insight.strip(),
+            "word_count": word_count,
+            "encrypted": is_encrypted,
+        }
+        if not _is_noise_entry(entry_data):
+            store["entries"].insert(0, entry_data)
+            _save_local_store(store)
 
     sheet_sync = (
         _post_to_sheets("add_entry", entry_data)
@@ -921,6 +1019,7 @@ def store_add_entry(
         "store_add_entry",
         details={
             "entry_id": entry_id,
+            "upserted_existing": existing_entry is not None,
             "methodology": entry_data["methodology"],
             "word_count": word_count,
             "encrypted": is_encrypted,
@@ -1139,6 +1238,8 @@ def export_entries_csv() -> str:
             "content",
             "tags",
             "word_count",
+            "updated_at",
+            "coach_insight",
         ]
     )
     for e in entries:
@@ -1157,6 +1258,8 @@ def export_entries_csv() -> str:
                 e.get("content", ""),
                 tags_str,
                 e.get("word_count", 0),
+                e.get("updated_at", e.get("timestamp", "")),
+                e.get("coach_insight", ""),
             ]
         )
     return output.getvalue()
