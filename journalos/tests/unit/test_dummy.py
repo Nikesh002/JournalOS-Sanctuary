@@ -4,7 +4,13 @@
 """Unit tests for JournalOS v2 — Security, Mental-Health Privacy, Vault Isolation & Moodscapes."""
 
 import json
+from pathlib import Path
+import sys
 import unittest
+
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
 from app.firestore_tools import (
     add_journal_entry,
@@ -29,6 +35,8 @@ from app.sheets_storage import (
     purge_vault_data,
     save_runtime_config,
     set_current_vault_id,
+    store_add_entry,
+    store_list_entries,
 )
 from frontend.main import handle_chat_message
 
@@ -182,6 +190,57 @@ class TestJournalOSWebApp(unittest.TestCase):
         log_event("TEST", "privacy_audit_check", status="OK", duration_ms=1.0)
         logs = get_recent_logs(limit=5)
         self.assertEqual(logs["privacy_mode"], "STRICT_PII_REDACTION_ACTIVE")
+
+    def test_no_duplicate_entries_on_fallback_or_upsert(self) -> None:
+        set_current_vault_id("dedup-test-vault-888")
+        try:
+            # Configure a fake API key so _call_gemini_rest_api runs and falls back to _smart_mindful_coach_fallback
+            save_runtime_config(user_name="Tester", gemini_api_key="AIzaSyFakeKeyForFallbackTest")
+            reflection_text = (
+                "🌿 Emotion: Grounded & Serene — I feel grounded, steady, and quietly at ease in my body right now.\n"
+                "Concept / Skill Explored: JournalOS app enhancement\n"
+                "Key Insight in my own words: Daily planner framework"
+            )
+            handle_chat_message(
+                message=reflection_text,
+                active_methodology="Learning Journaling",
+                selected_emotion="Grounded & Serene",
+            )
+            entries_after_chat = [
+                e for e in store_list_entries(limit=20) if e["content"] == reflection_text
+            ]
+            # Must create ONLY 1 entry even when Gemini API falls back to built-in coach
+            self.assertEqual(len(entries_after_chat), 1)
+            first_id = entries_after_chat[0]["entry_id"]
+            self.assertEqual(entries_after_chat[0]["tags"], ["learning", "grounded"])
+            self.assertTrue(bool(entries_after_chat[0].get("coach_insight")))
+
+            # Calling store_add_entry again with the same content should upsert in-place (merging tags & extra columns)
+            store_add_entry(
+                title="🌿 Emotion: Grounded & Serene — Full Updated Title",
+                content=reflection_text,
+                methodology="Learning Journaling",
+                mood="Grounded & Serene",
+                tags=["learning", "productivity"],
+                coach_insight="Updated coach insight in extra column",
+                sync_sheets=False,
+            )
+            entries_after_upsert = [
+                e for e in store_list_entries(limit=20) if e["content"] == reflection_text
+            ]
+            self.assertEqual(len(entries_after_upsert), 1)
+            self.assertEqual(entries_after_upsert[0]["entry_id"], first_id)
+            self.assertEqual(
+                entries_after_upsert[0]["tags"],
+                ["learning", "grounded", "productivity"],
+            )
+            self.assertEqual(
+                entries_after_upsert[0]["coach_insight"],
+                "Updated coach insight in extra column",
+            )
+        finally:
+            purge_vault_data()
+            set_current_vault_id("default")
 
 
 if __name__ == "__main__":

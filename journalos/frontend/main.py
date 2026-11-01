@@ -171,6 +171,69 @@ def _is_system_prompt_command(message: str) -> bool:
     return any(m.startswith(p) for p in prefixes)
 
 
+def _infer_mood_and_tags(
+    message: str,
+    active_methodology: str,
+    selected_emotion: str = "",
+    encrypted_content: str = "",
+) -> tuple[str, str, str, list[str]]:
+    """Computes consistent (mood, stored_title, stored_body, tags_list) for a journal reflection."""
+    msg_low = message.lower().strip()
+    mood = selected_emotion or "Grounded & Serene"
+    if not selected_emotion:
+        for m_kw, m_val in [
+            ("grateful", "Deeply Grateful"),
+            ("thankful", "Deeply Grateful"),
+            ("anxious", "Restless & Anxious"),
+            ("stressed", "Mentally Overloaded"),
+            ("overwhelmed", "Mentally Overloaded"),
+            ("excited", "Inspired & Driven"),
+            ("energized", "Inspired & Driven"),
+            ("race", "Inspired & Driven"),
+            ("build", "Focused & Intentional"),
+            ("tired", "Tired & Seeking Rest"),
+            ("focus", "Focused & Intentional"),
+        ]:
+            if m_kw in msg_low:
+                mood = m_val
+                break
+
+    first_line = message.splitlines()[0].split(".")[0][:62].strip()
+    title = first_line if len(first_line) >= 6 else f"{active_methodology} Reflection"
+    stored_title = f"🔒 {active_methodology} Reflection" if encrypted_content else title
+    stored_body = encrypted_content if encrypted_content else message
+    tags_list = list(
+        dict.fromkeys([active_methodology.lower().split()[0], mood.lower().split()[0]])
+    )
+    if encrypted_content:
+        tags_list.insert(0, f"wc:{len(message.split())}")
+    return mood, stored_title, stored_body, tags_list
+
+
+def _should_log_reflection(message: str) -> bool:
+    """Determines whether a chat message is a personal journal reflection that should be saved."""
+    if _is_system_prompt_command(message):
+        return False
+    msg_low = message.lower().strip()
+    return (
+        any(
+            w in msg_low
+            for w in (
+                "what is on my mind",
+                "present body scan",
+                "3 specific moments",
+                "right now my mind",
+                "grateful",
+                "today i",
+                "i feel",
+                "feeling ",
+                "my goal",
+            )
+        )
+        or len(message.split()) >= 10
+    )
+
+
 def _smart_mindful_coach_fallback(
     message: str,
     active_methodology: str = "Reflective Journaling",
@@ -255,56 +318,21 @@ def _smart_mindful_coach_fallback(
         return out
 
     # 4. Log / Save a Real Personal Reflection Entry (when not a system command)
-    if not _is_system_prompt_command(message) and (
-        any(
-            w in msg_low
-            for w in (
-                "what is on my mind",
-                "present body scan",
-                "3 specific moments",
-                "right now my mind",
-                "grateful",
-                "today i",
-                "i feel",
-                "feeling ",
-                "my goal",
-            )
+    if _should_log_reflection(message):
+        mood, stored_title, stored_body, tags_list = _infer_mood_and_tags(
+            message=message,
+            active_methodology=active_methodology,
+            selected_emotion=selected_emotion,
+            encrypted_content=encrypted_content,
         )
-        or len(message.split()) >= 12
-    ):
-        mood = selected_emotion or "Grounded & Serene"
-        if not selected_emotion:
-            for m_kw, m_val in [
-                ("grateful", "Deeply Grateful"),
-                ("thankful", "Deeply Grateful"),
-                ("anxious", "Restless & Anxious"),
-                ("stressed", "Mentally Overloaded"),
-                ("overwhelmed", "Mentally Overloaded"),
-                ("excited", "Inspired & Driven"),
-                ("energized", "Inspired & Driven"),
-                ("race", "Inspired & Driven"),
-                ("build", "Focused & Intentional"),
-                ("tired", "Tired & Seeking Rest"),
-                ("focus", "Focused & Intentional"),
-            ]:
-                if m_kw in msg_low:
-                    mood = m_val
-                    break
-
-        first_line = message.splitlines()[0].split(".")[0][:62].strip()
-        title = first_line if len(first_line) >= 6 else f"{active_methodology} Reflection"
-        stored_title = f"🔒 {active_methodology} Reflection" if encrypted_content else title
-        stored_body = encrypted_content if encrypted_content else message
-        tags_list = [active_methodology.lower().split()[0], mood.lower().split()[0]]
-        if encrypted_content:
-            tags_list.insert(0, f"wc:{len(message.split())}")
-
+        coach_note = "Notice the intention beneath your words—when you name what truly matters to you, you turn pressure into purposeful clarity."
         saved = store_add_entry(
             title=stored_title,
             content=stored_body,
             methodology=active_methodology,
             mood=mood,
             tags=tags_list,
+            coach_insight=coach_note,
         )
         p_data = json.loads(generate_reflective_prompt(active_methodology))
         card = _build_a2ui_card(
@@ -312,7 +340,7 @@ def _smart_mindful_coach_fallback(
             subtitle=f"{active_methodology} · Emotion: {mood} · {saved['storage']}",
             body_lines=[
                 f"Thank you for sharing this openly with me, {user_name}. I have recorded your {saved['data']['word_count']}-word reflection.",
-                f"💡 Companion Counsellor Reflection: Notice the intention beneath your words—when you name what truly matters to you, you turn pressure into purposeful clarity.",
+                f"💡 Companion Counsellor Reflection: {coach_note}",
                 f"🌱 Gentle Next Question ({active_methodology}): {p_data.get('prompt')}",
             ],
             footer="I am right here with you whenever you want to unpack this further.",
@@ -359,7 +387,7 @@ def _call_gemini_rest_api(
     selected_emotion: str = "",
     encrypted_content: str = "",
 ) -> list[dict[str, Any]] | None:
-    """Calls Google AI Studio's free Gemini 2.5 Flash REST API directly via standard library."""
+    """Calls Google AI Studio's free Gemini Flash REST API directly via standard library."""
     # For explicit UI views like "Show my recent entries" or "Guide me through", use the structured GUI cards directly
     if _is_system_prompt_command(message):
         return None
@@ -369,26 +397,6 @@ def _call_gemini_rest_api(
     stats = store_get_analytics()
     recent_entries = store_list_entries(limit=3)
     memories = stats.get("memories", [])[:5]
-
-    auto_saved_note = ""
-    if len(message.split()) >= 10:
-        first_line = message.splitlines()[0].split(".")[0][:58].strip()
-        stored_title = (
-            f"🔒 {active_methodology} Reflection"
-            if encrypted_content
-            else (first_line or f"{active_methodology} Reflection")
-        )
-        tags_list = [active_methodology.lower().split()[0]]
-        if encrypted_content:
-            tags_list.insert(0, f"wc:{len(message.split())}")
-        saved = store_add_entry(
-            title=stored_title,
-            content=encrypted_content or message,
-            methodology=active_methodology,
-            mood=selected_emotion or "Reflective",
-            tags=tags_list,
-        )
-        auto_saved_note = f"Logged to {saved['storage']}"
 
     image_url = None
     if any(
@@ -412,23 +420,44 @@ def _call_gemini_rest_api(
         "Return ONLY valid JSON."
     )
 
-    t0 = time.perf_counter()
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={urllib.parse.quote(api_key)}"
     payload = {
         "system_instruction": {"parts": [{"text": sys_prompt}]},
         "contents": [{"role": "user", "parts": [{"text": message}]}],
         "generationConfig": {"responseMimeType": "application/json", "temperature": 0.7},
     }
 
-    req = urllib.request.Request(
-        url,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
+    t0 = time.perf_counter()
+    raw = None
+    used_model = "gemini-2.5-flash"
+    last_err: Exception | None = None
+    for candidate_model in ("gemini-2.5-flash", "gemini-2.0-flash"):
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{candidate_model}:generateContent?key={urllib.parse.quote(api_key)}"
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                raw = json.loads(resp.read().decode("utf-8"))
+                used_model = candidate_model
+                break
+        except urllib.error.HTTPError as he:
+            last_err = he
+            if he.code == 404:
+                continue
+            break
+        except Exception as e:
+            last_err = e
+            break
+
+    if raw is None:
+        ms = (time.perf_counter() - t0) * 1000
+        log_event("GEMINI_API", "generateContent", status="FALLBACK", duration_ms=ms, error=last_err)
+        return None
+
     try:
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            raw = json.loads(resp.read().decode("utf-8"))
         ms = (time.perf_counter() - t0) * 1000
         cand_text = (
             raw.get("candidates", [{}])[0]
@@ -449,7 +478,28 @@ def _call_gemini_rest_api(
         paragraphs = parsed.get("paragraphs") or []
         if isinstance(paragraphs, str):
             paragraphs = [paragraphs]
-        footer = f"🤝 Companion Coach for {user_name} · Powered by Gemini 2.5 Flash"
+
+        # Save the entry ONLY AFTER Gemini succeeds, storing coach_insight in the extra column of the SAME single row!
+        auto_saved_note = ""
+        if _should_log_reflection(message):
+            mood, stored_title, stored_body, tags_list = _infer_mood_and_tags(
+                message=message,
+                active_methodology=active_methodology,
+                selected_emotion=selected_emotion,
+                encrypted_content=encrypted_content,
+            )
+            coach_insight_str = str(paragraphs[1] if len(paragraphs) > 1 else (paragraphs[0] if paragraphs else "")).strip()
+            saved = store_add_entry(
+                title=stored_title,
+                content=stored_body,
+                methodology=active_methodology,
+                mood=mood,
+                tags=tags_list,
+                coach_insight=coach_insight_str,
+            )
+            auto_saved_note = f"Logged to {saved['storage']}"
+
+        footer = f"🤝 Companion Coach for {user_name} · Powered by {used_model}"
         if auto_saved_note:
             footer = f"✅ {auto_saved_note} · {footer}"
 
