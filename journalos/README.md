@@ -18,7 +18,7 @@
 | **2. Companion Coach & Uncropped Multi-Line Moodscape** *(19 Frameworks + `NOW` badge + Emotion Pills)* | ![Companion Coach](assets/screenshot_coach_moodscape.png) |
 | **3. My Entries & Trends GUI Dashboard** *(KPI Tiles + Encrypted Reflection Badges)* | ![Entries & Trends](assets/screenshot_entries_trends.png) |
 | **4. Insights, Distribution Bars & Google Calendar Studio** *(Progress Bars + `.ics` / Google Calendar)* | ![Insights & Calendar](assets/screenshot_insights_calendar.png) |
-| **5. Zero-Trust Privacy, `VAULT_ENC:v1` & Redacted Logs** *(Persistent API Keys + `[REDACTED_FOR_PRIVACY]`)* | ![Privacy & Logs](assets/screenshot_privacy_security.png) |
+| **5. End-to-End Privacy, `VAULT_ENC:v1` & Redacted Logs** *(Persistent API Keys + `[REDACTED_FOR_PRIVACY]`)* | ![Privacy & Logs](assets/screenshot_privacy_security.png) |
 
 ---
 
