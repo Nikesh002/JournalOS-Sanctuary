@@ -24,3 +24,12 @@ application_default_credentials.json
 service-account*.json
 # Keep the demo GIF (README embeds it); ignore the large raw recording.
 *.webm
+
+# --- JournalOS Privacy & Local Vault Data (Never commit user PII, keys, or logs) ---
+journalos/data/*.json
+journalos/data/.*.key
+journalos/data/*.key
+journalos/logs/*.log
+journalos/logs/*.log.*
+journalos/logs/*.jsonl
+*.key

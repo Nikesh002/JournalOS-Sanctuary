@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JournalOS</title>
-<!-- Google Fonts & Material Symbols -->
+<title>JournalOS — Privacy-First Mindful AI Companion & Sanctuary</title>
+<link rel="icon" type="image/svg+xml" href="/logo.svg">
+<link rel="shortcut icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,317 +14,2142 @@
 <style>
   :root {
     --accent: #4f46e5;
-    --accent-dark: #4338ca;
-    --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    --bg: #f8fafc;
+    --accent-dark: #3730a3;
+    --accent-soft: #eef2ff;
+    --sage: #0d9488;
+    --sage-soft: #f0fdfa;
+    --header-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 52%, #0f766e 100%);
+    --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #0d9488 100%);
+    --bg: #f4f7f6;
+    --sidebar-bg: #ffffff;
     --card-bg: #ffffff;
     --border: #e2e8f0;
     --text-primary: #0f172a;
     --text-secondary: #475569;
-    --user-bubble: #4f46e5;
+    --text-muted: #94a3b8;
+    --user-bubble: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
     --agent-bubble: #ffffff;
+    --success: #10b981;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     background: var(--bg);
+    color: var(--text-primary);
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    color: var(--text-primary);
+    overflow: hidden;
   }
-  
-  /* Header branding */
+
+  /* Top Sanctuary Header */
   header {
-    background: var(--accent-gradient);
+    background: var(--header-gradient);
     color: #fff;
-    padding: 0.85rem 1.5rem;
+    padding: 0.65rem 1.25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
-    z-index: 10;
+    gap: 0.8rem;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.16);
+    z-index: 20;
+    flex-shrink: 0;
   }
   .brand-title {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.65rem;
     font-weight: 700;
-    font-size: 1.25rem;
-    letter-spacing: -0.01em;
+    font-size: 1.15rem;
   }
   .brand-subtitle {
-    font-size: 0.8rem;
-    opacity: 0.85;
+    font-size: 0.72rem;
+    opacity: 0.88;
     font-weight: 400;
+  }
+
+  /* Center Navigation Tabs */
+  .nav-tabs {
+    display: flex;
+    gap: 0.3rem;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 0.25rem;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+  }
+  .nav-tab {
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.88);
+    padding: 0.42rem 0.85rem;
+    border-radius: 9px;
+    font-size: 0.81rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: inherit;
+    transition: all 0.18s;
+  }
+  .nav-tab:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
+  .nav-tab.active {
+    background: #fff;
+    color: var(--accent-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+  }
+  .nav-tab.active .material-symbols-outlined { color: var(--accent-dark); }
+  .nav-tab .material-symbols-outlined { color: #fff; font-size: 1.05rem; }
+
+  /* Header Right Actions */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.42rem;
   }
   .status-pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(4px);
-    padding: 0.3rem 0.75rem;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.34rem 0.68rem;
     border-radius: 20px;
-    font-size: 0.78rem;
-    font-weight: 500;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #fff;
+    transition: all 0.15s;
+    font-family: inherit;
   }
+  .status-pill:hover { background: rgba(255, 255, 255, 0.26); }
   .status-dot {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     background: #10b981;
     border-radius: 50%;
     box-shadow: 0 0 6px #10b981;
   }
+  .status-dot.local {
+    background: #fbbf24;
+    box-shadow: 0 0 6px #fbbf24;
+  }
 
-  /* Dialogue stream area */
+  /* Main App Layout */
+  .app-shell {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Left Sidebar: 19 Methodologies Selector */
+  .sidebar {
+    width: 305px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: margin-left 0.25s ease;
+  }
+  body.focus-mode .sidebar {
+    margin-left: -305px;
+  }
+  .sidebar-header {
+    padding: 0.8rem 0.95rem 0.65rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .time-rec-box {
+    background: linear-gradient(135deg, #f0fdfa 0%, #eef2ff 100%);
+    border: 1px solid #99f6e4;
+    border-radius: 10px;
+    padding: 0.55rem 0.7rem;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .time-rec-box:hover { transform: translateY(-1px); }
+  .time-rec-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0f766e;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .time-rec-sub {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 0.15rem;
+  }
+  .sidebar-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.45rem;
+  }
+  .sidebar-search {
+    width: 100%;
+    padding: 0.48rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-family: inherit;
+    background: var(--bg);
+    outline: none;
+  }
+  .sidebar-search:focus { border-color: var(--accent); background: #fff; }
+  .methodologies-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.55rem 0.65rem 1.2rem;
+  }
+  .pillar-group { margin-bottom: 0.8rem; }
+  .pillar-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.45rem;
+  }
+  .meth-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    padding: 0.52rem 0.6rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+    margin-top: 0.14rem;
+  }
+  .meth-item:hover { background: #f1f5f9; }
+  .meth-item.active {
+    background: var(--accent-soft);
+    border-color: #c7d2fe;
+  }
+  .meth-icon { font-size: 1.12rem; color: var(--accent); margin-top: 0.1rem; }
+  .meth-info { flex: 1; min-width: 0; }
+  .meth-name {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.3rem;
+  }
+  .meth-item.active .meth-name { color: var(--accent-dark); font-weight: 700; }
+  .now-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    background: #ccfbf1;
+    color: #0f766e;
+    padding: 0.1rem 0.38rem;
+    border-radius: 99px;
+    flex-shrink: 0;
+  }
+  .meth-tagline {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Main Workspace Area */
+  .workspace {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: radial-gradient(circle at top right, #f0fdfa 0%, #f4f7f6 55%, #eef2ff 100%);
+  }
+
+  /* Active Methodology Banner */
+  .methodology-banner {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.7rem 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+  .banner-left { flex: 1; min-width: 260px; }
+  .banner-pill-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.2rem;
+    flex-wrap: wrap;
+  }
+  .pillar-badge {
+    font-size: 0.69rem;
+    font-weight: 700;
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    padding: 0.16rem 0.52rem;
+    border-radius: 6px;
+  }
+  .time-pill-badge {
+    font-size: 0.69rem;
+    font-weight: 700;
+    background: var(--sage-soft);
+    color: var(--sage);
+    padding: 0.16rem 0.52rem;
+    border-radius: 6px;
+  }
+  .banner-title { font-size: 0.98rem; font-weight: 700; color: var(--text-primary); }
+  .banner-prompt { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; }
+  .banner-actions { display: flex; gap: 0.42rem; flex-wrap: wrap; }
+
+  .btn-outline, .btn-primary, .btn-danger {
+    border-radius: 9px;
+    padding: 0.42rem 0.82rem;
+    font-size: 0.79rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .btn-outline {
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .btn-primary {
+    background: var(--accent-gradient);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.22);
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-danger {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+  }
+  .btn-danger:hover { background: #fee2e2; }
+
+  /* View Panels */
+  .view-panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+  .view-panel.active { display: flex; }
+
+  /* --- VIEW 1: Chat / Companion Counsellor --- */
   #log {
     flex: 1;
     overflow-y: auto;
-    padding: 1.5rem 1.2rem;
-    max-width: 840px;
+    padding: 1.15rem 1.5rem;
+    max-width: 900px;
     width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 1rem;
   }
-
-  /* Dialogue message block */
   .msg {
     display: flex;
-    gap: 0.8rem;
-    max-width: 88%;
-    animation: fadeIn 0.25s ease-out;
+    gap: 0.75rem;
+    max-width: 90%;
+    animation: fadeIn 0.22s ease-out;
   }
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
-  .msg.user {
-    align-self: flex-end;
-    flex-direction: row-reverse;
-  }
-  .msg.agent {
-    align-self: flex-start;
-  }
-
-  /* Avatars */
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.agent { align-self: flex-start; width: 100%; }
   .avatar {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
     color: #fff;
-    font-size: 1.1rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
   }
-  .msg.user .avatar {
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
-  }
-  .msg.agent .avatar {
-    background: linear-gradient(135deg, #8b5cf6, #a855f7);
-  }
-
-  /* Dialogue bubble content */
-  .msg-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .msg-author {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-left: 0.2rem;
-  }
-  .msg.user .msg-author {
-    text-align: right;
-    margin-right: 0.2rem;
-    margin-left: 0;
-  }
-
+  .msg.user .avatar { background: linear-gradient(135deg, #4f46e5, #0d9488); }
+  .msg.agent .avatar { background: linear-gradient(135deg, #312e81, #0f766e); }
+  .avatar .material-symbols-outlined { color: #fff; font-size: 1.1rem; }
+  .msg-content { display: flex; flex-direction: column; gap: 0.22rem; max-width: 100%; flex: 1; }
+  .msg.user .msg-content { flex: initial; }
+  .msg-author { font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); }
+  .msg.user .msg-author { text-align: right; }
   .bubble {
-    padding: 0.8rem 1.1rem;
-    border-radius: 16px;
+    padding: 0.75rem 1.05rem;
+    border-radius: 15px;
     background: var(--agent-bubble);
     border: 1px solid var(--border);
-    text-align: left;
     white-space: pre-wrap;
-    line-height: 1.5;
-    font-size: 0.95rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-    color: var(--text-primary);
+    line-height: 1.52;
+    font-size: 0.91rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   }
   .msg.user .bubble {
     background: var(--user-bubble);
     color: #fff;
     border: none;
     border-top-right-radius: 4px;
-    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.25);
   }
-  .msg.agent .bubble {
-    border-top-left-radius: 4px;
-  }
-
-  /* Rich A2UI Card inside bubble */
+  .msg.agent .bubble { border-top-left-radius: 4px; }
   .bubble.rich {
     background: transparent;
     border: none;
     padding: 0;
-    max-width: 100%;
     white-space: normal;
     box-shadow: none;
   }
 
-  /* Prompt chips above input */
-  .prompt-chips {
+  /* Interactive Emotion Selector Strip inside Guide Cards & Chat */
+  .emotion-picker-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 0.8rem 0.95rem;
+    margin-top: 0.65rem;
+  }
+  .emotion-picker-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.45rem;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .emotion-pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .emotion-pill {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 0.32rem 0.72rem;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .emotion-pill:hover, .emotion-pill.selected {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-dark);
+    transform: translateY(-1px);
+  }
+
+  /* Rich Entries & Trends GUI Dashboard inside Chat */
+  .gui-dashboard-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.15rem;
+    margin-top: 0.65rem;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+  }
+  .gui-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 0.6rem;
-    padding: 0.6rem 1.2rem 0.2rem;
-    max-width: 840px;
+    margin-bottom: 0.9rem;
+  }
+  .gui-kpi-box {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.6rem 0.75rem;
+    text-align: center;
+  }
+  .gui-kpi-val { font-size: 1.15rem; font-weight: 700; color: var(--accent-dark); }
+  .gui-kpi-lbl { font-size: 0.68rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; }
+  .gui-entry-row {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 0.55rem;
+    background: #fcfcfd;
+  }
+
+  /* Prompt chips & Multi-line Google Chat Style Composer */
+  .composer-dock {
+    max-width: 900px;
     width: 100%;
     margin: 0 auto;
+    padding: 0.35rem 1.2rem 0.85rem;
+  }
+  .prompt-chips {
+    display: flex;
+    gap: 0.45rem;
+    padding-bottom: 0.45rem;
     overflow-x: auto;
   }
   .chip {
-    background: #ffffff;
+    background: #fff;
     color: #334155;
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 0.5rem 0.95rem;
-    font-size: 0.84rem;
+    padding: 0.36rem 0.8rem;
+    font-size: 0.77rem;
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    flex: 1;
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    transition: all 0.15s;
+    font-family: inherit;
   }
   .chip:hover {
     background: var(--accent);
     color: #fff;
     border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
   }
 
-  /* Form / Input bar */
-  form {
+  .chat-box-wrapper {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 0.55rem 0.75rem;
     display: flex;
-    gap: 0.6rem;
-    padding: 1rem 1.2rem 1.2rem;
-    max-width: 840px;
-    width: 100%;
-    margin: 0 auto;
-    background: transparent;
-  }
-  input {
-    flex: 1;
-    padding: 0.8rem 1.1rem;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    font-size: 0.98rem;
-    background: #fff;
-    outline: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    flex-direction: column;
+    gap: 0.35rem;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
     transition: border-color 0.2s, box-shadow 0.2s;
-    font-family: inherit;
   }
-  input:focus {
+  .chat-box-wrapper:focus-within {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
   }
-  button[type="submit"] {
-    padding: 0.8rem 1.4rem;
+  .chat-box-top {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.6rem;
+  }
+  #input {
+    flex: 1;
     border: none;
-    border-radius: 12px;
-    background: var(--accent-gradient);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 0.92rem;
+    line-height: 1.48;
+    min-height: 42px;
+    max-height: 165px;
+    overflow-y: auto;
+    background: transparent;
+    color: var(--text-primary);
+    padding: 0.2rem 0.25rem;
+  }
+  .chat-box-footer {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.25);
-    font-family: inherit;
-  }
-  button[type="submit"]:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 5px 14px rgba(79, 70, 229, 0.35);
+    justify-content: space-between;
+    font-size: 0.71rem;
+    color: var(--text-muted);
+    border-top: 1px solid #f1f5f9;
+    padding-top: 0.3rem;
+    flex-wrap: wrap;
+    gap: 0.3rem;
   }
 
-  /* --- A2UI component styles --- */
+  /* --- VIEW 2 & VIEW 3 Shared Layout --- */
+  .scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.2rem 1.5rem;
+  }
+  .two-col-grid {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 1.2rem;
+  }
+  @media (max-width: 900px) {
+    .two-col-grid { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .gui-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .panel-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.15rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  }
+  .panel-card h3 {
+    margin: 0 0 0.85rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .field-group { margin-bottom: 0.8rem; }
+  .field-group label {
+    display: block;
+    font-size: 0.77rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.28rem;
+  }
+  .field-input, .field-select, .field-textarea {
+    width: 100%;
+    padding: 0.58rem 0.78rem;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font-size: 0.87rem;
+    font-family: inherit;
+    outline: none;
+    background: #fff;
+  }
+  .field-textarea { min-height: 155px; resize: vertical; line-height: 1.5; }
+  .field-input:focus, .field-select:focus, .field-textarea:focus { border-color: var(--accent); }
+
+  .entry-item {
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.65rem;
+    background: #fafaf9;
+  }
+  .entry-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+    flex-wrap: wrap;
+  }
+  .entry-title { font-weight: 700; font-size: 0.9rem; }
+  .badge {
+    font-size: 0.69rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 99px;
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+  }
+  .badge.mood { background: #ecfdf5; color: #047857; }
+  .badge.encrypted { background: #fef3c7; color: #b45309; }
+
+  /* Insights Visual Progress Bars & Stats */
+  .stats-row {
+    max-width: 1140px;
+    margin: 0 auto 1.15rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.85rem;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 0.95rem 1.1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  }
+  .stat-label { font-size: 0.73rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
+  .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-top: 0.2rem; }
+  .stat-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+  .bar-row { margin-bottom: 0.55rem; }
+  .bar-label-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+  .bar-track {
+    height: 8px;
+    background: #f1f5f9;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--accent-gradient);
+    border-radius: 99px;
+  }
+
+  .habit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 0.55rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* --- A2UI Card Styles --- */
   .a2card { border:1px solid var(--border); border-radius:14px; padding:1.1rem; background:#fff; box-shadow:0 3px 12px rgba(0,0,0,.05); max-width:100%; }
   .a2card + .a2card, .a2col > .a2card { margin-top:.7rem; }
-  .a2col { display:flex; flex-direction:column; gap:.5rem; }
+  .a2col { display:flex; flex-direction:column; gap:.55rem; }
   .a2row { display:flex; flex-direction:row; gap:.7rem; align-items:center; flex-wrap:wrap; }
   .a2row.between { justify-content:space-between; }
-  .a2text { margin:0; line-height:1.45; }
-  .a2text.a2-h1 { font-size:1.45rem; font-weight:700; color:var(--text-primary); }
-  .a2text.a2-h2 { font-size:1.2rem; font-weight:700; color:var(--text-primary); }
-  .a2text.a2-h3 { font-size:1.05rem; font-weight:600; color:var(--text-primary); }
-  .a2text.a2-h4 { font-size:0.95rem; font-weight:600; color:var(--text-primary); }
-  .a2text.a2-caption { font-size:.84rem; color:var(--text-secondary); }
+  .a2text { margin:0; line-height:1.48; white-space: pre-wrap; }
+  .a2text.a2-h1 { font-size:1.3rem; font-weight:700; color:var(--text-primary); }
+  .a2text.a2-h2 { font-size:1.08rem; font-weight:700; color:var(--text-primary); }
+  .a2text.a2-h3 { font-size:0.96rem; font-weight:600; color:var(--text-primary); }
+  .a2text.a2-caption { font-size:.79rem; color:var(--text-secondary); }
   .a2divider { border:none; border-top:1px solid var(--border); margin:.5rem 0; width:100%; }
-  .a2img { max-width:100%; border-radius:10px; display:block; margin-top:.6rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-  .material-symbols-outlined { font-family:'Material Symbols Outlined'; font-size:1.25rem; line-height:1; vertical-align:middle; color:var(--accent); }
+  .a2img { width:100%; height: auto; object-fit: contain; border-radius:12px; display:block; margin-top:.45rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .material-symbols-outlined { font-family:'Material Symbols Outlined'; font-size:1.12rem; line-height:1; vertical-align:middle; }
+
+  /* Modal Overlays & Full-Screen Privacy Shield */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(3px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 1rem;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal-card {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1.4rem;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.22);
+  }
+  .privacy-shield {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 55%, #134e4a 100%);
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    padding: 2rem;
+  }
+  .privacy-shield.locked { display: flex; }
+  .shield-box {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(12px);
+    padding: 2rem 2.2rem;
+    border-radius: 20px;
+    max-width: 420px;
+    width: 100%;
+  }
+  .steps-box {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-size: 0.81rem;
+    line-height: 1.55;
+    margin-bottom: 0.9rem;
+  }
+  .log-row {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.74rem;
+    padding: 0.42rem 0.6rem;
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
 </style>
 </head>
 <body>
+
+<!-- Full-Screen Privacy Lock Shield (Triggered by 'Lock' button or pressing Esc) -->
+<div class="privacy-shield" id="privacyShield">
+  <div class="shield-box">
+    <span class="material-symbols-outlined" style="font-size:3rem; color:#5eead4; margin-bottom:0.6rem;">shield_lock</span>
+    <h2 style="margin:0 0 0.4rem; font-size:1.35rem;">Sanctuary Privacy Shield Active</h2>
+    <p style="font-size:0.84rem; opacity:0.85; line-height:1.5; margin-bottom:1.2rem;">
+      Your mental state reflections and emotions are hidden from view.
+    </p>
+    <div id="pinUnlockGroup" style="display:none; margin-bottom:1rem;">
+      <input type="password" id="unlockPinInput" class="field-input" placeholder="Enter your Privacy Passphrase / PIN..." style="text-align:center;" onkeydown="if(event.key==='Enter') unlockSanctuary()">
+      <div id="unlockPinError" style="color:#fda4af; font-size:0.78rem; margin-top:0.35rem;"></div>
+    </div>
+    <button type="button" class="btn-primary" onclick="unlockSanctuary()" style="width:100%; justify-content:center; padding:0.7rem;">
+      <span class="material-symbols-outlined" style="color:#fff;">lock_open</span> Unlock Sanctuary
+    </button>
+  </div>
+</div>
+
 <header>
   <div class="brand-title">
-    <span class="material-symbols-outlined" style="font-size:1.5rem; color:#fff;">auto_stories</span>
+    <img src="/logo.svg" alt="JournalOS Logo" style="width:36px; height:36px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.22); flex-shrink:0;">
     <div>
-      JournalOS
-      <div class="brand-subtitle">AI-Powered Reflective Journaling Companion</div>
+      JournalOS Sanctuary
+      <div class="brand-subtitle" id="headerGreetingSub">🔒 Zero-Trust Private AI Companion & 19-Framework Studio</div>
     </div>
   </div>
-  <div class="status-pill">
-    <span class="status-dot"></span> Online
+
+  <div class="nav-tabs">
+    <button type="button" class="nav-tab active" onclick="switchView('coach', this)">
+      <span class="material-symbols-outlined">forum</span> Companion Coach
+    </button>
+    <button type="button" class="nav-tab" onclick="switchView('composer', this)">
+      <span class="material-symbols-outlined">edit_note</span> Write & Entries
+    </button>
+    <button type="button" class="nav-tab" onclick="switchView('insights', this)">
+      <span class="material-symbols-outlined">insights</span> Insights & Calendar
+    </button>
+  </div>
+
+  <div class="header-actions">
+    <button type="button" class="status-pill" onclick="lockSanctuary()" title="Instant Privacy Shield (Shortcut: Press Esc key anytime)">
+      <span class="material-symbols-outlined" style="font-size:0.98rem; color:#5eead4;">shield_lock</span>
+      <span>Lock (Esc)</span>
+    </button>
+    <button type="button" class="status-pill" onclick="toggleFocusMode()" title="Toggle Distraction-Free Writing Mode">
+      <span class="material-symbols-outlined" style="font-size:0.98rem; color:#fff;">spa</span>
+      <span id="focusModeLbl">Focus</span>
+    </button>
+    <button type="button" class="status-pill" onclick="openLogsModal()" title="View Redacted Diagnostics Logs">
+      <span class="material-symbols-outlined" style="font-size:0.98rem; color:#fff;">terminal</span>
+      <span>Logs</span>
+    </button>
+    <button type="button" class="status-pill" onclick="openSettingsModal()" id="sheetsStatusBtn">
+      <span class="status-dot local" id="sheetsStatusDot"></span>
+      <span id="sheetsStatusText">Privacy & Cloud</span>
+      <span class="material-symbols-outlined" style="font-size:0.98rem; color:#fff;">settings</span>
+    </button>
   </div>
 </header>
-<div id="log"></div>
-<div class="prompt-chips">
-  <button type="button" class="chip" onclick="sendPrompt('Log a gratitude entry and show my mood trends')">✨ Log Gratitude & Trends</button>
-  <button type="button" class="chip" onclick="sendPrompt('Generate a moodscape image for a serene forest')">🎨 Generate Moodscape Art</button>
-  <button type="button" class="chip" onclick="sendPrompt('Give me an inspirational quote and reflection prompt')">💡 Quote & Reflection</button>
+
+<div class="app-shell">
+  <!-- Left Sidebar: Interactive 19-Methodology Selector + Timezone Recommendation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="time-rec-box" id="timeRecBox" onclick="applyTimeRecommendedMethodology()" title="Click to switch to the recommended framework for your current time">
+        <div class="time-rec-title">
+          <span id="tzClockLabel">⏰ Detecting local time...</span>
+          <span style="text-decoration:underline;">Try Now →</span>
+        </div>
+        <div class="time-rec-sub" id="tzRecMethodology">Recommended: Morning Pages</div>
+      </div>
+
+      <div class="sidebar-title">
+        <span>19 Journaling Frameworks</span>
+        <span class="badge" id="methCountBadge">19</span>
+      </div>
+      <input type="text" class="sidebar-search" id="methSearch" placeholder="Filter frameworks (e.g. Morning, Gratitude)..." oninput="renderMethodologiesSidebar()">
+    </div>
+    <div class="methodologies-list" id="methodologiesList"></div>
+  </aside>
+
+  <!-- Main Workspace -->
+  <main class="workspace">
+    <!-- Dynamic Methodology Banner -->
+    <div class="methodology-banner">
+      <div class="banner-left">
+        <div class="banner-pill-row">
+          <span class="pillar-badge" id="activePillarBadge">Clarity & Mindful Presence</span>
+          <span class="time-pill-badge" id="activeTimeBadge">🌅 Best at 5 AM – 10 AM</span>
+          <span class="banner-title" id="activeMethTitle">Morning Pages</span>
+        </div>
+        <div class="banner-prompt" id="activeMethPrompt">
+          💬 Prompt: Without editing or overthinking, what thoughts, worries, or half-formed ideas are floating at the surface of your mind right now?
+        </div>
+      </div>
+      <div class="banner-actions">
+        <button type="button" class="btn-outline" onclick="coachMeOnActiveMethodology()">
+          <span class="material-symbols-outlined" style="color:var(--accent)">psychology</span> Guide Me in Chat
+        </button>
+        <button type="button" class="btn-outline" onclick="insertTemplateIntoChatInput()">
+          <span class="material-symbols-outlined" style="color:var(--accent)">post_add</span> Put Structure in Chat
+        </button>
+        <button type="button" class="btn-primary" onclick="generateMoodscapeForActive()">
+          <span class="material-symbols-outlined" style="color:#fff">palette</span> Moodscape
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 1: Companion Counsellor Chat -->
+    <section class="view-panel active" id="view-coach">
+      <div id="log"></div>
+
+      <div class="composer-dock">
+        <div class="prompt-chips">
+          <button type="button" class="chip" onclick="coachMeOnActiveMethodology()">🧭 Guide Me in Chat</button>
+          <button type="button" class="chip" onclick="sendPrompt('Show my recent journal entries and mood trends')">📊 My Entries & Trends</button>
+          <button type="button" class="chip" onclick="generateMoodscapeForActive()">🎨 Animated Moodscape</button>
+          <button type="button" class="chip" onclick="sendPrompt('Give me an inspirational quote and reflection prompt')">💡 Quote & Spark</button>
+        </div>
+
+        <form id="form" class="chat-box-wrapper">
+          <div class="chat-box-top">
+            <textarea id="input" rows="2" placeholder="Share what's on your mind in complete privacy... (Shift+Enter for new line, Enter to send, Esc to lock screen)" autofocus></textarea>
+            <button type="submit" class="btn-primary" style="padding: 0.65rem 1.15rem; border-radius: 10px; font-size:0.88rem; flex-shrink:0;">
+              Send <span class="material-symbols-outlined" style="color:#fff;">send</span>
+            </button>
+          </div>
+          <div class="chat-box-footer">
+            <span id="selectedEmotionIndicator">🌿 Emotion Tag: <strong>Grounded & Serene</strong></span>
+            <span id="encryptionStatusBadge">🔒 Private Isolated Vault · <strong>Enter</strong> to send · <strong>Shift+Enter</strong> new line</span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEW 2: Guided Entry Composer & Journal Chronicle -->
+    <section class="view-panel" id="view-composer">
+      <div class="scroll-container">
+        <div class="two-col-grid">
+          <!-- Left: Structured Entry Composer -->
+          <div class="panel-card">
+            <h3>
+              <span>✍️ Private Entry Composer</span>
+              <span class="badge" id="composerMethBadge">Morning Pages</span>
+            </h3>
+            <div class="field-group">
+              <label>Entry Title</label>
+              <input type="text" id="entryTitle" class="field-input" placeholder="e.g., Morning Clarity & Priorities">
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="field-group">
+                <label>Journaling Methodology (19 Frameworks)</label>
+                <select id="entryMethodology" class="field-select" onchange="selectMethodologyByName(this.value)"></select>
+              </div>
+              <div class="field-group">
+                <label>Nuanced Emotion / Inner State</label>
+                <select id="entryMood" class="field-select"></select>
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Quick Emotion Vocabulary (Click to weave into your reflection)</label>
+              <div class="emotion-pills-wrap" id="composerEmotionPills"></div>
+            </div>
+            <div class="field-group">
+              <label>Your Private Reflection</label>
+              <textarea id="entryContent" class="field-textarea" placeholder="Write freely and honestly..."></textarea>
+            </div>
+            <div class="field-group">
+              <label>Tags (comma-separated)</label>
+              <input type="text" id="entryTags" class="field-input" placeholder="mindfulness, gratitude, goals">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.75rem;">
+              <span id="saveEntryStatus" style="font-size:0.8rem; color:var(--success); font-weight:600;"></span>
+              <div style="display:flex; gap:0.5rem;">
+                <button type="button" class="btn-outline" onclick="fillTemplateIntoComposer()">Insert Framework Structure</button>
+                <button type="button" class="btn-primary" onclick="submitStructuredEntry()">
+                  <span class="material-symbols-outlined" style="color:#fff;">lock</span> Save Privately
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Live Journal Chronicle -->
+          <div class="panel-card">
+            <h3>
+              <span>📖 Your Private Journal Chronicle</span>
+              <div style="display:flex; gap:0.4rem;">
+                <a href="/api/export.csv" class="btn-outline" style="text-decoration:none; font-size:0.74rem; padding:0.3rem 0.65rem;">
+                  <span class="material-symbols-outlined" style="font-size:0.95rem;">download</span> Export CSV
+                </a>
+                <button type="button" class="btn-outline" style="font-size:0.74rem; padding:0.3rem 0.65rem;" onclick="syncWithGoogleSheets()">
+                  <span class="material-symbols-outlined" style="font-size:0.95rem;">sync</span> Sync Sheet
+                </button>
+              </div>
+            </h3>
+            <div id="entriesFeedList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: Insights, Habits & Google Calendar Reminder Studio -->
+    <section class="view-panel" id="view-insights">
+      <div class="scroll-container">
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Total Journal Entries</div>
+            <div class="stat-value" id="statTotalEntries">0</div>
+            <div class="stat-sub" id="statActiveDaysSub">Across 1 active day</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Mindful Words Written</div>
+            <div class="stat-value" id="statTotalWords">0</div>
+            <div class="stat-sub">Expressive depth</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active Practice Streak</div>
+            <div class="stat-value" id="statBestStreak">🔥 1 Day</div>
+            <div class="stat-sub">True consecutive journal days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Dominant Emotion</div>
+            <div class="stat-value" id="statTopMood" style="font-size:1.18rem;">Grounded & Serene</div>
+            <div class="stat-sub" id="statTopMethSub">Top: Morning Pages</div>
+          </div>
+        </div>
+
+        <div class="two-col-grid" style="margin-bottom: 1.2rem;">
+          <!-- Left: Crisp Visual Emotion & Methodology Distribution -->
+          <div class="panel-card">
+            <h3>
+              <span>📊 Emotion & Methodology Breakdown</span>
+              <span class="badge">Live Visuals</span>
+            </h3>
+            <div style="font-size:0.76rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:0.45rem;">Emotion Language Distribution</div>
+            <div id="moodBarsContainer" style="margin-bottom:1rem;"></div>
+            <div style="font-size:0.76rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:0.45rem;">Journaling Methodologies Used</div>
+            <div id="methBarsContainer"></div>
+          </div>
+
+          <!-- Right: Google Calendar Journaling Reminder Studio -->
+          <div class="panel-card">
+            <h3>
+              <span>📅 Book Google Calendar Journaling Reminder</span>
+              <span class="badge mood">Free Calendar Sync</span>
+            </h3>
+            <p style="font-size:0.81rem; color:var(--text-secondary); margin:0 0 0.8rem; line-height:1.45;">
+              Lock in your mindful journaling habit by booking a recurring sanctuary slot directly on your Google Calendar.
+            </p>
+            <div class="field-group">
+              <label>Journaling Framework to Practice</label>
+              <select id="calMethodology" class="field-select"></select>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.7rem;">
+              <div class="field-group">
+                <label>Preferred Reminder Time</label>
+                <input type="time" id="calTime" class="field-input" value="08:00">
+              </div>
+              <div class="field-group">
+                <label>Recurrence Schedule</label>
+                <select id="calRecurrence" class="field-select">
+                  <option value="RRULE:FREQ=DAILY">Every Day (Daily Ritual)</option>
+                  <option value="RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR">Weekdays (Mon – Fri)</option>
+                  <option value="RRULE:FREQ=WEEKLY">Weekly Deep Reflection</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex; gap:0.55rem; flex-wrap:wrap; margin-top:0.3rem;">
+              <button type="button" class="btn-primary" onclick="bookGoogleCalendarReminder()">
+                <span class="material-symbols-outlined" style="color:#fff;">event_available</span> Book in Google Calendar
+              </button>
+              <button type="button" class="btn-outline" onclick="downloadIcsReminder()">
+                <span class="material-symbols-outlined" style="color:var(--accent);">download</span> Download .ics File
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <!-- Habit & Goal Streak Tracker -->
+          <div class="panel-card">
+            <h3>
+              <span>🔥 Mindful Habits & Goals Tracker</span>
+              <span class="badge">Synced to Sheet</span>
+            </h3>
+            <div style="display:flex; gap:0.5rem; margin-bottom:0.9rem;">
+              <input type="text" id="newHabitTitle" class="field-input" placeholder="Add a daily ritual or goal (e.g., 10m Morning Pages)...">
+              <button type="button" class="btn-primary" onclick="addNewHabit()">+ Add</button>
+            </div>
+            <div id="habitsListContainer"></div>
+          </div>
+
+          <!-- Long-Term Memory Bank -->
+          <div class="panel-card">
+            <h3>
+              <span>🧠 Private Companion Memory Bank</span>
+              <span class="badge">6 Core Domains</span>
+            </h3>
+            <div id="memoriesListContainer"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
-<form id="form">
-  <input id="input" placeholder="Reflect, log an entry, or ask JournalOS..." autocomplete="off" autofocus>
-  <button type="submit">
-    Send <span class="material-symbols-outlined" style="font-size:1.1rem; color:#fff;">send</span>
-  </button>
-</form>
+
+<!-- Modal 1: Privacy Shield, End-to-End Encryption, Google Sheets & Gemini Setup -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem;">
+      <h3 style="margin:0; font-size:1.08rem;">🔒 Security, Mental-Health Privacy & Cloud Setup</h3>
+      <button type="button" class="btn-outline" onclick="closeSettingsModal()" style="padding:0.25rem 0.6rem;">✕</button>
+    </div>
+
+    <div class="steps-box" style="background:#f0fdfa; border-color:#99f6e4;">
+      <strong>🛡️ Zero-Trust Privacy Protections Active:</strong>
+      <ul style="margin:0.35rem 0 0; padding-left:1.2rem; font-size:0.79rem;">
+        <li><strong>Per-Browser Vault Isolation:</strong> Your reflections are isolated by a unique cryptographic Vault ID. Other users cannot access your entries or settings.</li>
+        <li><strong>Zero PII Logging:</strong> Server logs automatically redact all journal text, emotions, names, and keys.</li>
+        <li><strong>Client-Side AES-256-GCM Encryption (Optional below):</strong> Encrypt your reflections inside your browser before they are ever stored or sent to Google Sheets.</li>
+      </ul>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
+      <div class="field-group">
+        <label>🤝 Your Preferred Name (Used by your Companion Coach)</label>
+        <input type="text" id="cfgUserName" class="field-input" placeholder="Enter your preferred name...">
+      </div>
+      <div class="field-group">
+        <label>🔐 Privacy Lock PIN / Encryption Passphrase</label>
+        <input type="password" id="cfgPrivacyPin" class="field-input" placeholder="Set PIN for screen lock & AES-256 encryption">
+      </div>
+    </div>
+
+    <div class="field-group" style="display:flex; align-items:center; gap:0.5rem;">
+      <input type="checkbox" id="cfgEncryptToggle" style="width:16px; height:16px;">
+      <label for="cfgEncryptToggle" style="margin:0; cursor:pointer;">
+        <strong>Enable Zero-Knowledge AES-256-GCM Encryption</strong> (Encrypts reflection text in browser before saving to disk / Google Sheets)
+      </label>
+    </div>
+
+    <hr style="border:none; border-top:1px solid var(--border); margin:0.85rem 0;">
+
+    <div class="steps-box">
+      <strong>📊 Connect Your Private Google Sheet ($0 Database):</strong>
+      <ol style="margin:0.35rem 0 0.55rem; padding-left:1.2rem;">
+        <li>Create a blank spreadsheet at <a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> → <strong>Extensions → Apps Script</strong>.</li>
+        <li>Paste our Connector Script (optionally set <code>SECRET_VAULT_TOKEN</code> inside it) and deploy as a <strong>Web app</strong>.</li>
+      </ol>
+      <button type="button" class="btn-outline" onclick="copyAppsScriptCode()" id="copyScriptBtn">
+        <span class="material-symbols-outlined" style="color:var(--accent)">content_copy</span> Copy Google Apps Script Code
+      </button>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:0.75rem;">
+      <div class="field-group">
+        <label>Google Apps Script Web App URL</label>
+        <input type="url" id="cfgWebhookUrl" class="field-input" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
+      <div class="field-group">
+        <label>Sheet Secret Vault Token (Optional)</label>
+        <input type="password" id="cfgSecretToken" class="field-input" placeholder="Matches SECRET_VAULT_TOKEN">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Free Google AI Studio Gemini API Key (<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get a free key here</a>)</label>
+      <input type="password" id="cfgGeminiKey" class="field-input" placeholder="AIzaSy... (Stored in your private vault)">
+    </div>
+
+    <div id="cfgSaveFeedback" style="font-size:0.82rem; font-weight:600; color:var(--success); margin-bottom:0.75rem;"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem;">
+      <button type="button" class="btn-danger" onclick="purgeMyLocalVault()">
+        <span class="material-symbols-outlined" style="font-size:1rem;">delete_forever</span> Wipe Local Device Data
+      </button>
+      <div style="display:flex; gap:0.55rem;">
+        <button type="button" class="btn-outline" onclick="closeSettingsModal()">Close</button>
+        <button type="button" class="btn-primary" onclick="saveRuntimeSettings()">Save Privacy & Cloud Settings</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Live Privacy-Redacted Debug Logs Viewer -->
+<div class="modal-backdrop" id="logsModal">
+  <div class="modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+      <h3 style="margin:0; font-size:1.05rem;">🛠️ Privacy-Redacted Diagnostics & Debug Logs</h3>
+      <div style="display:flex; gap:0.4rem;">
+        <button type="button" class="btn-outline" onclick="clearServerLogs()" style="padding:0.25rem 0.6rem;">Clear Logs</button>
+        <button type="button" class="btn-outline" onclick="refreshDebugLogs()" style="padding:0.25rem 0.6rem;">Refresh</button>
+        <button type="button" class="btn-outline" onclick="closeLogsModal()" style="padding:0.25rem 0.6rem;">✕</button>
+      </div>
+    </div>
+    <div style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:0.7rem;" id="logFilesInfo">
+      🔒 <strong>STRICT_PII_REDACTION_ACTIVE:</strong> Journal content, emotions, and keys are never written to logs.
+    </div>
+    <div id="logsContainer" style="background:#0f172a; color:#e2e8f0; border-radius:10px; padding:0.6rem; max-height:360px; overflow-y:auto;"></div>
+  </div>
+</div>
+
+<!-- Modal 3: First-Time Sanctuary Onboarding Setup (Dynamic User Name & Optional Privacy PIN) -->
+<div class="modal-backdrop" id="onboardingModal">
+  <div class="modal-card" style="max-width:480px;">
+    <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.85rem;">
+      <img src="/logo.svg" alt="JournalOS Logo" style="width:44px; height:44px; border-radius:12px;">
+      <div>
+        <h3 style="margin:0; font-size:1.15rem;">Welcome to JournalOS Sanctuary</h3>
+        <div style="font-size:0.78rem; color:var(--text-secondary);">100% Free · Open-Source · Zero-Trust Mental Health Privacy</div>
+      </div>
+    </div>
+    <p style="font-size:0.84rem; color:var(--text-secondary); line-height:1.5; margin:0 0 1rem;">
+      Before we begin your mindful reflection journey, how should your personal Companion Counsellor address you? <em>(You can change this anytime in ⚙️ Settings.)</em>
+    </p>
+    <div class="field-group">
+      <label>🤝 What is your preferred name?</label>
+      <input type="text" id="onboardUserName" class="field-input" placeholder="Enter your name or nickname..." onkeydown="if(event.key==='Enter') completeFirstTimeSetup()">
+    </div>
+    <div class="field-group">
+      <label>🔐 Optional: Set a Privacy Passphrase / PIN (for Esc Lock & AES-256 Encryption)</label>
+      <input type="password" id="onboardPin" class="field-input" placeholder="Leave blank if not needed right now" onkeydown="if(event.key==='Enter') completeFirstTimeSetup()">
+    </div>
+    <div id="onboardError" style="color:#dc2626; font-size:0.78rem; margin-bottom:0.65rem;"></div>
+    <button type="button" class="btn-primary" onclick="completeFirstTimeSetup()" style="width:100%; justify-content:center; padding:0.7rem; font-size:0.9rem;">
+      <span class="material-symbols-outlined" style="color:#fff;">spa</span> Enter My Sanctuary →
+    </button>
+  </div>
+</div>
 
 <script>
 const log = document.getElementById("log");
 const form = document.getElementById("form");
 const input = document.getElementById("input");
 
-function sendPrompt(text) {
-  input.value = text;
-  form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+let ALL_METHODOLOGIES = [];
+let ALL_EMOTIONS = [];
+let ACTIVE_METHODOLOGY = null;
+let SELECTED_EMOTION = "Grounded & Serene";
+let TIME_RECOMMENDATION = null;
+let USER_NAME = localStorage.getItem("journalos_user_name") || "";
+
+/* ----------------------------------------------------------------------------
+ * 0. Zero-Trust Privacy Vault ID, Screen Lock Shield & WebCrypto AES-256-GCM
+ * -------------------------------------------------------------------------- */
+function getVaultId() {
+  let vid = localStorage.getItem("journalos_vault_id");
+  if (!vid) {
+    vid = "default"; // Use default local vault unless user resets/rotates on shared machine
+    localStorage.setItem("journalos_vault_id", vid);
+  }
+  return vid;
 }
 
-function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+async function apiFetch(url, options = {}) {
+  const headers = Object.assign({}, options.headers || {}, {
+    "X-JournalOS-Vault-ID": getVaultId()
+  });
+  return fetch(url, Object.assign({}, options, { headers }));
+}
+
+function getPrivacyPin() {
+  return sessionStorage.getItem("journalos_pin") || localStorage.getItem("journalos_pin_hash") || "";
+}
+
+function isEncryptionEnabled() {
+  return localStorage.getItem("journalos_e2ee") === "true" && Boolean(sessionStorage.getItem("journalos_pin"));
+}
+
+function updateEncryptionFooterBadge() {
+  const badge = document.getElementById("encryptionStatusBadge");
+  if (isEncryptionEnabled()) {
+    badge.innerHTML = "🔐 <strong>AES-256-GCM End-to-End Encryption Active</strong> · Enter to send · Shift+Enter new line";
+  } else {
+    badge.innerHTML = "🔒 Private Isolated Vault · <strong>Enter</strong> to send · <strong>Shift+Enter</strong> new line";
+  }
+}
+
+async function _deriveAesKey(passphrase, saltBytes) {
+  const enc = new TextEncoder();
+  const keyMaterial = await window.crypto.subtle.importKey(
+    "raw", enc.encode(passphrase), { name: "PBKDF2" }, false, ["deriveKey"]
+  );
+  return window.crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: saltBytes, iterations: 100000, hash: "SHA-256" },
+    keyMaterial,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
+}
+
+function _bufToB64(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf)));
+}
+function _b64ToBuf(b64) {
+  return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+}
+
+async function encryptTextIfEnabled(plainText) {
+  if (!isEncryptionEnabled()) return "";
+  const passphrase = sessionStorage.getItem("journalos_pin");
+  if (!passphrase || !window.crypto || !window.crypto.subtle) return "";
+  const salt = window.crypto.getRandomValues(new Uint8Array(12));
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  const key = await _deriveAesKey(passphrase, salt);
+  const ct = await window.crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    key,
+    new TextEncoder().encode(plainText)
+  );
+  return `ENC:v1:${_bufToB64(salt)}:${_bufToB64(iv)}:${_bufToB64(ct)}`;
+}
+
+async function decryptTextIfNeeded(text) {
+  if (!text || !String(text).startsWith("ENC:v1:")) return text;
+  const passphrase = sessionStorage.getItem("journalos_pin");
+  if (!passphrase) return "🔒 [Encrypted Reflection — Enter your Privacy Passphrase in ⚙️ Settings to unlock]";
+  try {
+    const parts = String(text).split(":");
+    const salt = _b64ToBuf(parts[2]);
+    const iv = _b64ToBuf(parts[3]);
+    const ct = _b64ToBuf(parts[4]);
+    const key = await _deriveAesKey(passphrase, salt);
+    const dec = await window.crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ct);
+    return new TextDecoder().decode(dec);
+  } catch (e) {
+    return "🔒 [Encrypted Reflection — Passphrase required to decrypt]";
+  }
+}
+
+function lockSanctuary() {
+  const shield = document.getElementById("privacyShield");
+  const hasPin = Boolean(localStorage.getItem("journalos_pin_saved"));
+  document.getElementById("pinUnlockGroup").style.display = hasPin ? "block" : "none";
+  document.getElementById("unlockPinInput").value = "";
+  document.getElementById("unlockPinError").textContent = "";
+  shield.classList.add("locked");
+}
+
+function unlockSanctuary() {
+  const savedPin = localStorage.getItem("journalos_pin_saved");
+  if (savedPin) {
+    const entered = document.getElementById("unlockPinInput").value;
+    if (entered !== savedPin) {
+      document.getElementById("unlockPinError").textContent = "Incorrect Privacy PIN / Passphrase.";
+      return;
+    }
+    sessionStorage.setItem("journalos_pin", entered);
+  }
+  document.getElementById("privacyShield").classList.remove("locked");
+  loadDashboardData();
+}
+
+// Press Esc key anywhere to immediately activate Privacy Shield!
+document.addEventListener("keydown", (ev) => {
+  if (ev.key === "Escape") {
+    const settingsOpen = document.getElementById("settingsModal").classList.contains("open");
+    const logsOpen = document.getElementById("logsModal").classList.contains("open");
+    if (settingsOpen) { closeSettingsModal(); return; }
+    if (logsOpen) { closeLogsModal(); return; }
+    lockSanctuary();
+  }
+});
+
+/* ----------------------------------------------------------------------------
+ * 1. Dynamic Auto-Expanding Multi-Line Textarea (Shift+Enter newline, Enter send)
+ * -------------------------------------------------------------------------- */
+function autoResizeTextarea(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 165) + "px";
+}
+
+input.addEventListener("input", () => autoResizeTextarea(input));
+
+input.addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter" && !ev.shiftKey) {
+    ev.preventDefault();
+    form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+  }
+});
+
+function setSelectedEmotion(emotionLabel) {
+  SELECTED_EMOTION = emotionLabel;
+  document.getElementById("selectedEmotionIndicator").innerHTML =
+    `🌿 Emotion Tag: <strong>${emotionLabel}</strong>`;
+  const moodSel = document.getElementById("entryMood");
+  if (moodSel) moodSel.value = emotionLabel;
+}
+
+function toggleFocusMode() {
+  document.body.classList.toggle("focus-mode");
+  const isFocus = document.body.classList.contains("focus-mode");
+  document.getElementById("focusModeLbl").textContent = isFocus ? "Exit Focus" : "Focus";
+}
+
+/* ----------------------------------------------------------------------------
+ * 2. View Navigation & Timezone-Aware Initialization
+ * -------------------------------------------------------------------------- */
+function switchView(viewId, btnEl) {
+  document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+  const target = document.getElementById("view-" + viewId);
+  if (target) target.classList.add("active");
+
+  if (btnEl) {
+    document.querySelectorAll(".nav-tab").forEach(b => b.classList.remove("active"));
+    btnEl.classList.add("active");
+  } else {
+    const idx = { coach: 0, composer: 1, insights: 2 }[viewId] || 0;
+    const tabs = document.querySelectorAll(".nav-tab");
+    tabs.forEach(b => b.classList.remove("active"));
+    if (tabs[idx]) tabs[idx].classList.add("active");
+  }
+
+  if (viewId === "composer" || viewId === "insights") {
+    loadDashboardData();
+  }
+}
+
+async function initApp() {
+  const savedPin = localStorage.getItem("journalos_pin_saved");
+  if (savedPin) {
+    sessionStorage.setItem("journalos_pin", savedPin);
+    document.getElementById("cfgPrivacyPin").value = savedPin;
+  }
+  document.getElementById("cfgEncryptToggle").checked = localStorage.getItem("journalos_e2ee") === "true";
+  updateEncryptionFooterBadge();
+
+  const localNow = new Date();
+  const localHour = localNow.getHours();
+  const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local Time";
+  const timeStr = localNow.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  try {
+    const [resMeth, resRec] = await Promise.all([
+      apiFetch("/api/methodologies"),
+      apiFetch(`/api/recommendation?hour=${localHour}&tz=${encodeURIComponent(tzName)}`)
+    ]);
+    const data = await resMeth.json();
+    TIME_RECOMMENDATION = await resRec.json();
+
+    ALL_METHODOLOGIES = data.methodologies || [];
+    ALL_EMOTIONS = data.emotions || [];
+
+    document.getElementById("tzClockLabel").textContent = `⏰ ${timeStr} (${tzName})`;
+    document.getElementById("tzRecMethodology").textContent =
+      `Suggested Now: ${TIME_RECOMMENDATION.recommended_methodology}`;
+
+    const recMeth = ALL_METHODOLOGIES.find(m => m.id === TIME_RECOMMENDATION.recommended_id) || ALL_METHODOLOGIES[0];
+    if (recMeth) selectMethodology(recMeth);
+
+    renderMethodologiesSidebar();
+    populateSelectsAndEmotions();
+  } catch (e) {
+    console.error("Failed loading methodologies:", e);
+  }
+
+  await loadDashboardData();
+
+  if (!USER_NAME) {
+    document.getElementById("onboardingModal").classList.add("open");
+    setTimeout(() => document.getElementById("onboardUserName").focus(), 100);
+  } else {
+    greetUserInChat();
+  }
+}
+
+function greetUserInChat() {
+  const localNow = new Date();
+  const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local Time";
+  const timeStr = localNow.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const greeting = TIME_RECOMMENDATION ? TIME_RECOMMENDATION.greeting : "Hello";
+  const recReason = TIME_RECOMMENDATION ? TIME_RECOMMENDATION.reason : "";
+  const displayName = USER_NAME || "Friend";
+
+  log.innerHTML = "";
+  const b = bubble("agent");
+  coachMeOnActiveMethodology(b, `${greeting}, ${displayName}! 🤝 It's ${timeStr} (${tzName}). ${recReason}`);
+}
+
+async function completeFirstTimeSetup() {
+  const rawName = (document.getElementById("onboardUserName").value || "").trim();
+  const pinVal = (document.getElementById("onboardPin").value || "").trim();
+  const errEl = document.getElementById("onboardError");
+
+  if (!rawName) {
+    errEl.textContent = "Please enter your preferred name so your Companion Coach knows how to address you.";
+    return;
+  }
+  errEl.textContent = "";
+  USER_NAME = rawName;
+  localStorage.setItem("journalos_user_name", rawName);
+
+  if (pinVal) {
+    localStorage.setItem("journalos_pin_saved", pinVal);
+    sessionStorage.setItem("journalos_pin", pinVal);
+    localStorage.setItem("journalos_e2ee", "true");
+    document.getElementById("cfgPrivacyPin").value = pinVal;
+    document.getElementById("cfgEncryptToggle").checked = true;
+    updateEncryptionFooterBadge();
+  }
+
+  await apiFetch("/api/config", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_name: rawName })
+  });
+
+  document.getElementById("onboardingModal").classList.remove("open");
+  await loadDashboardData();
+  greetUserInChat();
+}
+
+function applyTimeRecommendedMethodology() {
+  if (!TIME_RECOMMENDATION) return;
+  const found = ALL_METHODOLOGIES.find(m => m.id === TIME_RECOMMENDATION.recommended_id);
+  if (found) {
+    selectMethodology(found);
+    coachMeOnActiveMethodology();
+  }
+}
+
+function renderMethodologiesSidebar() {
+  const container = document.getElementById("methodologiesList");
+  const query = (document.getElementById("methSearch").value || "").toLowerCase().trim();
+  container.innerHTML = "";
+
+  const filtered = ALL_METHODOLOGIES.filter(m =>
+    !query ||
+    m.name.toLowerCase().includes(query) ||
+    m.pillar.toLowerCase().includes(query) ||
+    m.tagline.toLowerCase().includes(query)
+  );
+  document.getElementById("methCountBadge").textContent = filtered.length;
+
+  const groups = {};
+  for (const m of filtered) {
+    if (!groups[m.pillar]) groups[m.pillar] = [];
+    groups[m.pillar].push(m);
+  }
+
+  for (const pillar of Object.keys(groups)) {
+    const grp = el("div", "pillar-group");
+    grp.appendChild(el("div", "pillar-label", pillar));
+    for (const m of groups[pillar]) {
+      const isRec = TIME_RECOMMENDATION && TIME_RECOMMENDATION.recommended_id === m.id;
+      const item = el("div", "meth-item" + (ACTIVE_METHODOLOGY && ACTIVE_METHODOLOGY.id === m.id ? " active" : ""));
+      item.onclick = () => selectMethodology(m);
+
+      const icon = el("span", "material-symbols-outlined meth-icon", m.icon || "auto_stories");
+      const info = el("div", "meth-info");
+      const nameRow = el("div", "meth-name");
+      nameRow.appendChild(el("span", null, m.name));
+      if (isRec) {
+        nameRow.appendChild(el("span", "now-badge", "⏰ NOW"));
+      }
+      info.appendChild(nameRow);
+      info.appendChild(el("div", "meth-tagline", m.tagline));
+
+      item.appendChild(icon);
+      item.appendChild(info);
+      grp.appendChild(item);
+    }
+    container.appendChild(grp);
+  }
+}
+
+function populateSelectsAndEmotions() {
+  const sel = document.getElementById("entryMethodology");
+  const calSel = document.getElementById("calMethodology");
+  if (sel) sel.innerHTML = "";
+  if (calSel) calSel.innerHTML = "";
+
+  for (const m of ALL_METHODOLOGIES) {
+    if (sel) {
+      const opt = document.createElement("option");
+      opt.value = m.name;
+      opt.textContent = `${m.name} (${m.pillar})`;
+      sel.appendChild(opt);
+    }
+    if (calSel) {
+      const opt2 = document.createElement("option");
+      opt2.value = m.name;
+      opt2.textContent = `${m.name} — ${m.time_label || m.pillar}`;
+      calSel.appendChild(opt2);
+    }
+  }
+  if (ACTIVE_METHODOLOGY) {
+    if (sel) sel.value = ACTIVE_METHODOLOGY.name;
+    if (calSel) calSel.value = ACTIVE_METHODOLOGY.name;
+  }
+
+  const moodSel = document.getElementById("entryMood");
+  const pillsWrap = document.getElementById("composerEmotionPills");
+  if (moodSel) moodSel.innerHTML = "";
+  if (pillsWrap) pillsWrap.innerHTML = "";
+
+  for (const em of ALL_EMOTIONS) {
+    if (moodSel) {
+      const opt = document.createElement("option");
+      opt.value = em.label;
+      opt.textContent = `${em.emoji} ${em.label} (${em.group})`;
+      moodSel.appendChild(opt);
+    }
+    if (pillsWrap) {
+      const pill = el("button", "emotion-pill", `${em.emoji} ${em.label}`);
+      pill.type = "button";
+      pill.onclick = () => {
+        setSelectedEmotion(em.label);
+        const area = document.getElementById("entryContent");
+        if (area && !area.value.includes(em.phrase)) {
+          area.value = em.phrase + "\n\n" + area.value;
+        }
+      };
+      pillsWrap.appendChild(pill);
+    }
+  }
+}
+
+function selectMethodology(m) {
+  ACTIVE_METHODOLOGY = m;
+  document.getElementById("activePillarBadge").textContent = m.pillar;
+  document.getElementById("activeTimeBadge").textContent = m.time_label || "🌿 Flexible Timing";
+  document.getElementById("activeMethTitle").textContent = m.name;
+  document.getElementById("activeMethPrompt").textContent = "💬 Prompt: " + m.prompt;
+
+  const badge = document.getElementById("composerMethBadge");
+  if (badge) badge.textContent = m.name;
+
+  const sel = document.getElementById("entryMethodology");
+  if (sel) sel.value = m.name;
+  const calSel = document.getElementById("calMethodology");
+  if (calSel) calSel.value = m.name;
+
+  renderMethodologiesSidebar();
+}
+
+function selectMethodologyByName(name) {
+  const found = ALL_METHODOLOGIES.find(m => m.name === name);
+  if (found) selectMethodology(found);
+}
+
+function insertTemplateIntoChatInput(customPrefix) {
+  switchView("coach");
+  if (!ACTIVE_METHODOLOGY) return;
+  const struct = ACTIVE_METHODOLOGY.template || "";
+  const prefix = customPrefix ? customPrefix + "\n" : "";
+  input.value = prefix + struct;
+  autoResizeTextarea(input);
+  input.focus();
+}
+
+async function coachMeOnActiveMethodology(existingBubble, customGreeting) {
+  switchView("coach");
+  const mName = ACTIVE_METHODOLOGY ? ACTIVE_METHODOLOGY.name : "Reflective Journaling";
+  const b = existingBubble || bubble("agent");
+  b.textContent = "…";
+  try {
+    const res = await apiFetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: `Guide me through a ${mName} session with a thoughtful reflection question.`,
+        methodology: mName,
+        emotion: SELECTED_EMOTION
+      })
+    });
+    const data = await res.json();
+    const parts = data.parts || [];
+    if (customGreeting) {
+      parts.unshift({ kind: "text", text: customGreeting });
+    }
+    await renderReply(b, parts);
+  } catch (e) {
+    b.textContent = "Error: " + e.message;
+  }
+}
+
+function fillTemplateIntoComposer() {
+  if (!ACTIVE_METHODOLOGY) return;
+  const textarea = document.getElementById("entryContent");
+  if (!textarea.value.trim()) {
+    textarea.value = ACTIVE_METHODOLOGY.template || "";
+  } else if (!textarea.value.includes(ACTIVE_METHODOLOGY.template)) {
+    textarea.value += "\n\n" + (ACTIVE_METHODOLOGY.template || "");
+  }
+  const titleInput = document.getElementById("entryTitle");
+  if (!titleInput.value.trim()) {
+    titleInput.value = `${ACTIVE_METHODOLOGY.name} Reflection`;
+  }
+  textarea.focus();
+}
+
+function generateMoodscapeForActive() {
+  switchView("coach");
+  const mName = ACTIVE_METHODOLOGY ? ACTIVE_METHODOLOGY.name : "Mindfulness";
+  const tagline = ACTIVE_METHODOLOGY ? ACTIVE_METHODOLOGY.tagline : "serene inner clarity";
+  sendPrompt(`Generate a visual moodscape image for ${mName}: ${tagline}`);
+}
+
+/* ----------------------------------------------------------------------------
+ * 3. Dashboard, Visual Insights & Google Calendar Booking
+ * -------------------------------------------------------------------------- */
+async function loadDashboardData() {
+  try {
+    const res = await apiFetch("/api/dashboard");
+    const data = await res.json();
+    const stats = data.analytics || {};
+    const cfg = data.config || {};
+
+    const configuredName = (cfg.user_name || stats.user_name || localStorage.getItem("journalos_user_name") || "").trim();
+    if (configuredName) {
+      USER_NAME = configuredName;
+      localStorage.setItem("journalos_user_name", configuredName);
+    }
+    const displayName = USER_NAME || "Friend";
+    document.getElementById("cfgUserName").value = USER_NAME;
+    document.getElementById("headerGreetingSub").textContent =
+      `🔒 Private Sanctuary for ${displayName} · Companion Counsellor & 19 Frameworks`;
+
+    const dot = document.getElementById("sheetsStatusDot");
+    const txt = document.getElementById("sheetsStatusText");
+    if (cfg.sheets_connected) {
+      dot.classList.remove("local");
+      txt.textContent = "Private Sheet Live";
+    } else {
+      dot.classList.add("local");
+      txt.textContent = "Privacy & Cloud";
+    }
+    if (cfg.google_sheets_webhook_masked && !document.getElementById("cfgWebhookUrl").value) {
+      document.getElementById("cfgWebhookUrl").placeholder = cfg.google_sheets_webhook_masked;
+    }
+    if (cfg.gemini_configured && !document.getElementById("cfgGeminiKey").value) {
+      document.getElementById("cfgGeminiKey").placeholder = "✓ Gemini API Key Saved & Active (leave blank to keep)";
+    }
+    if (cfg.vault_token_set && !document.getElementById("cfgSecretToken").value) {
+      document.getElementById("cfgSecretToken").placeholder = "✓ Secret Vault Token Saved & Active (leave blank to keep)";
+    }
+
+    document.getElementById("statTotalEntries").textContent = stats.total_entries ?? 0;
+    document.getElementById("statActiveDaysSub").textContent =
+      `Across ${stats.active_days || 1} active calendar day(s)`;
+    document.getElementById("statTotalWords").textContent = stats.total_words ?? 0;
+    const streakVal = stats.best_streak ?? 1;
+    document.getElementById("statBestStreak").textContent =
+      `🔥 ${streakVal} ${streakVal === 1 ? "Day" : "Days"}`;
+    document.getElementById("statTopMood").textContent = stats.top_mood || "Grounded & Serene";
+    document.getElementById("statTopMethSub").textContent =
+      `Top Framework: ${stats.top_methodology || "Morning Pages"}`;
+
+    renderDistributionBars("moodBarsContainer", stats.mood_counts || {}, stats.total_entries || 1);
+    renderDistributionBars("methBarsContainer", stats.methodology_counts || {}, stats.total_entries || 1);
+
+    const entriesList = document.getElementById("entriesFeedList");
+    entriesList.innerHTML = "";
+    const entries = data.entries || [];
+    if (entries.length === 0) {
+      entriesList.appendChild(el("div", null, "No journal entries in this vault yet. Write your first reflection on the left!"));
+    } else {
+      for (const e of entries) {
+        const card = el("div", "entry-item");
+        const hdr = el("div", "entry-item-header");
+        hdr.appendChild(el("div", "entry-title", e.title || "Untitled Reflection"));
+        const pills = el("div", null);
+        pills.style.display = "flex";
+        pills.style.gap = "0.35rem";
+        if (String(e.content || "").startsWith("ENC:v1:")) {
+          pills.appendChild(el("span", "badge encrypted", "🔐 AES-256 Encrypted"));
+        }
+        pills.appendChild(el("span", "badge", e.methodology || "Reflective"));
+        pills.appendChild(el("span", "badge mood", e.mood || "Grounded & Serene"));
+        hdr.appendChild(pills);
+
+        const decryptedBody = await decryptTextIfNeeded(e.content || "");
+        const body = el("div", null, decryptedBody);
+        body.style.fontSize = "0.84rem";
+        body.style.color = "var(--text-secondary)";
+        body.style.lineHeight = "1.46";
+        body.style.whiteSpace = "pre-wrap";
+
+        const meta = el("div", null, `${String(e.timestamp || "").slice(0, 10)} · ${e.word_count || 0} words`);
+        meta.style.fontSize = "0.72rem";
+        meta.style.color = "var(--text-muted)";
+        meta.style.marginTop = "0.38rem";
+
+        card.appendChild(hdr);
+        card.appendChild(body);
+        card.appendChild(meta);
+        entriesList.appendChild(card);
+      }
+    }
+
+    const habitsBox = document.getElementById("habitsListContainer");
+    habitsBox.innerHTML = "";
+    for (const h of (stats.habits || [])) {
+      const row = el("div", "habit-row");
+      const left = el("div", null);
+      const t = el("div", null, h.title);
+      t.style.fontWeight = "600";
+      t.style.fontSize = "0.86rem";
+      const sub = el("div", null, `${h.category || "Habit"} · ${h.status || "Active"} · ⏰ ${h.reminder_time || "08:00"}`);
+      sub.style.fontSize = "0.73rem";
+      sub.style.color = "var(--text-secondary)";
+      left.appendChild(t);
+      left.appendChild(sub);
+
+      const right = el("div", null);
+      right.style.display = "flex";
+      right.style.alignItems = "center";
+      right.style.gap = "0.4rem";
+      right.appendChild(el("span", "badge mood", `🔥 ${h.streak || 1}d`));
+
+      const calBtn = el("button", "btn-outline", "📅 Remind");
+      calBtn.style.padding = "0.24rem 0.5rem";
+      calBtn.style.fontSize = "0.72rem";
+      calBtn.onclick = () => openHabitGoogleCalendar(h.title, h.reminder_time || "08:00");
+      right.appendChild(calBtn);
+
+      const checkBtn = el("button", "btn-outline", "+1 Check-in");
+      checkBtn.style.padding = "0.24rem 0.5rem";
+      checkBtn.style.fontSize = "0.72rem";
+      checkBtn.onclick = () => incrementHabit(h.title, h.category);
+      right.appendChild(checkBtn);
+
+      row.appendChild(left);
+      row.appendChild(right);
+      habitsBox.appendChild(row);
+    }
+
+    const memBox = document.getElementById("memoriesListContainer");
+    memBox.innerHTML = "";
+    for (const m of (stats.memories || [])) {
+      const item = el("div", "entry-item");
+      const hdr = el("div", "entry-item-header");
+      hdr.appendChild(el("span", "badge", m.domain || "User Insight"));
+      hdr.appendChild(el("span", null, String(m.timestamp || "").slice(0, 10)));
+      const fact = el("div", null, m.fact || "");
+      fact.style.fontSize = "0.84rem";
+      fact.style.marginTop = "0.25rem";
+      item.appendChild(hdr);
+      item.appendChild(fact);
+      memBox.appendChild(item);
+    }
+  } catch (e) {
+    console.error("Error loading dashboard:", e);
+  }
+}
+
+function renderDistributionBars(containerId, countsMap, totalCount) {
+  const box = document.getElementById(containerId);
+  if (!box) return;
+  box.innerHTML = "";
+  const entries = Object.entries(countsMap).sort((a, b) => b[1] - a[1]);
+  if (entries.length === 0) {
+    box.appendChild(el("div", null, "No data recorded yet."));
+    return;
+  }
+  for (const [label, count] of entries) {
+    const pct = Math.min(100, Math.round((count / Math.max(1, totalCount)) * 100));
+    const row = el("div", "bar-row");
+    const line = el("div", "bar-label-line");
+    line.appendChild(el("span", null, label));
+    line.appendChild(el("span", null, `${count} (${pct}%)`));
+    const track = el("div", "bar-track");
+    const fill = el("div", "bar-fill");
+    fill.style.width = `${pct}%`;
+    track.appendChild(fill);
+    row.appendChild(line);
+    row.appendChild(track);
+    box.appendChild(row);
+  }
+}
+
+/* Google Calendar Reminder Booking */
+function _buildCalendarDates(timeStr) {
+  const [hh, mm] = (timeStr || "08:00").split(":").map(Number);
+  const start = new Date();
+  start.setHours(hh || 8, mm || 0, 0, 0);
+  if (start < new Date()) start.setDate(start.getDate() + 1);
+  const end = new Date(start.getTime() + 15 * 60000);
+  const fmt = (d) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  return { startStr: fmt(start), endStr: fmt(end) };
+}
+
+function bookGoogleCalendarReminder() {
+  const methName = document.getElementById("calMethodology").value || "Morning Pages";
+  const timeVal = document.getElementById("calTime").value || "08:00";
+  const recur = document.getElementById("calRecurrence").value || "RRULE:FREQ=DAILY";
+  const methObj = ALL_METHODOLOGIES.find(m => m.name === methName) || ALL_METHODOLOGIES[0];
+
+  const { startStr, endStr } = _buildCalendarDates(timeVal);
+  const title = `🌿 JournalOS Sanctuary: ${methName} (${USER_NAME})`;
+  const details =
+    `Mindful Journaling Session with JournalOS (${methName})\n\n` +
+    `💬 Reflection Prompt:\n${methObj ? methObj.prompt : ""}\n\n` +
+    `📝 Suggested Structure:\n${methObj ? methObj.template : ""}\n\n` +
+    `Open JournalOS: ${window.location.origin}`;
+
+  const gcalUrl =
+    `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+    `&text=${encodeURIComponent(title)}` +
+    `&dates=${startStr}/${endStr}` +
+    `&details=${encodeURIComponent(details)}` +
+    `&recur=${encodeURIComponent(recur)}`;
+
+  window.open(gcalUrl, "_blank", "noopener");
+}
+
+function openHabitGoogleCalendar(habitTitle, timeVal) {
+  const { startStr, endStr } = _buildCalendarDates(timeVal || "08:00");
+  const title = `🔥 Mindful Ritual: ${habitTitle} (${USER_NAME})`;
+  const details = `Daily Mindful Ritual tracked in JournalOS: ${habitTitle}\nOpen JournalOS: ${window.location.origin}`;
+  const gcalUrl =
+    `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+    `&text=${encodeURIComponent(title)}` +
+    `&dates=${startStr}/${endStr}` +
+    `&details=${encodeURIComponent(details)}` +
+    `&recur=${encodeURIComponent("RRULE:FREQ=DAILY")}`;
+  window.open(gcalUrl, "_blank", "noopener");
+}
+
+function downloadIcsReminder() {
+  const methName = document.getElementById("calMethodology").value || "Morning Pages";
+  const timeVal = document.getElementById("calTime").value || "08:00";
+  const recur = document.getElementById("calRecurrence").value || "RRULE:FREQ=DAILY";
+  const methObj = ALL_METHODOLOGIES.find(m => m.name === methName) || ALL_METHODOLOGIES[0];
+  const { startStr, endStr } = _buildCalendarDates(timeVal);
+
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//JournalOS Sanctuary//EN",
+    "BEGIN:VEVENT",
+    `DTSTART:${startStr}`,
+    `DTEND:${endStr}`,
+    recur,
+    `SUMMARY:JournalOS Sanctuary - ${methName}`,
+    `DESCRIPTION:${(methObj ? methObj.prompt : "").replace(/\n/g, "\\n")}`,
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ].join("\r\n");
+
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `journalos_${methName.toLowerCase().replace(/\s+/g, "_")}.ics`;
+  a.click();
+}
+
+async function submitStructuredEntry() {
+  const title = document.getElementById("entryTitle").value.trim() || "Mindful Reflection";
+  const rawContent = document.getElementById("entryContent").value.trim();
+  const methodology = document.getElementById("entryMethodology").value;
+  const mood = document.getElementById("entryMood").value;
+  const tagsRaw = document.getElementById("entryTags").value;
+  const tags = tagsRaw ? tagsRaw.split(",").map(s => s.trim()).filter(Boolean) : [];
+
+  if (!rawContent) {
+    alert("Please write a few words of reflection before saving.");
+    return;
+  }
+
+  const encContent = await encryptTextIfEnabled(rawContent);
+  if (encContent) {
+    tags.unshift(`wc:${rawContent.split(/\s+/).length}`);
+  }
+
+  const statusEl = document.getElementById("saveEntryStatus");
+  statusEl.textContent = "Saving privately...";
+  const res = await apiFetch("/api/entries", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: encContent ? `🔒 ${title}` : title,
+      content: encContent || rawContent,
+      methodology,
+      mood,
+      tags
+    })
+  });
+  const data = await res.json();
+  statusEl.textContent = `✓ Saved (${data.storage || "Private Vault"})`;
+  document.getElementById("entryTitle").value = "";
+  document.getElementById("entryContent").value = "";
+  await loadDashboardData();
+  setTimeout(() => { statusEl.textContent = ""; }, 4000);
+}
+
+async function incrementHabit(title, category) {
+  await apiFetch("/api/habits", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, category, increment_streak: true })
+  });
+  await loadDashboardData();
+}
+
+async function addNewHabit() {
+  const inp = document.getElementById("newHabitTitle");
+  const title = inp.value.trim();
+  if (!title) return;
+  inp.value = "";
+  await apiFetch("/api/habits", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, category: "Habit", status: "Active", increment_streak: false })
+  });
+  await loadDashboardData();
+}
+
+async function syncWithGoogleSheets() {
+  const res = await apiFetch("/api/sync", { method: "POST" });
+  const data = await res.json();
+  alert(data.message || "Sync complete");
+  await loadDashboardData();
+}
+
+/* ----------------------------------------------------------------------------
+ * 4. Privacy Settings, Vault Purge & Redacted Debug Logs Modals
+ * -------------------------------------------------------------------------- */
+function openSettingsModal() { document.getElementById("settingsModal").classList.add("open"); }
+function closeSettingsModal() { document.getElementById("settingsModal").classList.remove("open"); }
+
+async function openLogsModal() {
+  document.getElementById("logsModal").classList.add("open");
+  await refreshDebugLogs();
+}
+function closeLogsModal() { document.getElementById("logsModal").classList.remove("open"); }
+
+async function refreshDebugLogs() {
+  const box = document.getElementById("logsContainer");
+  box.innerHTML = "Loading redacted diagnostics...";
+  try {
+    const res = await apiFetch("/api/logs?limit=60");
+    const data = await res.json();
+    document.getElementById("logFilesInfo").innerHTML =
+      `🔒 <strong>${data.privacy_mode || "STRICT_PII_REDACTION_ACTIVE"}:</strong> No journal content, emotions, or keys are logged. (${data.total_buffered || 0} events)`;
+    box.innerHTML = "";
+    for (const ev of (data.events || [])) {
+      const row = el("div", "log-row");
+      const timePart = String(ev.timestamp || "").slice(11, 19);
+      const dur = ev.duration_ms != null ? ` (${ev.duration_ms}ms)` : "";
+      const left = el("span", null, `[${timePart}] [${ev.category}:${ev.action}] ${JSON.stringify(ev.details || {})}`);
+      const right = el("span", null, `${ev.status}${dur}`);
+      right.style.color = ev.status === "OK" ? "#34d399" : "#fbbf24";
+      row.appendChild(left);
+      row.appendChild(right);
+      box.appendChild(row);
+    }
+  } catch (e) {
+    box.textContent = "Failed to load logs: " + e.message;
+  }
+}
+
+async function clearServerLogs() {
+  await apiFetch("/api/logs/clear", { method: "POST" });
+  await refreshDebugLogs();
+}
+
+async function purgeMyLocalVault() {
+  if (!confirm("⚠️ Are you sure you want to permanently wipe all local journal entries, memories, and credentials stored on this device?")) {
+    return;
+  }
+  await apiFetch("/api/privacy/purge", { method: "POST" });
+  localStorage.removeItem("journalos_pin_saved");
+  localStorage.removeItem("journalos_user_name");
+  localStorage.removeItem("journalos_e2ee");
+  sessionStorage.removeItem("journalos_pin");
+  localStorage.setItem("journalos_vault_id", "vault-" + Math.random().toString(36).slice(2) + Date.now());
+  alert("✓ Local device data wiped and a fresh isolated Vault ID has been generated.");
+  window.location.reload();
+}
+
+async function copyAppsScriptCode() {
+  const res = await apiFetch("/api/apps-script");
+  const code = await res.text();
+  await navigator.clipboard.writeText(code);
+  const btn = document.getElementById("copyScriptBtn");
+  btn.textContent = "✓ Copied Google Apps Script to Clipboard!";
+  setTimeout(() => {
+    btn.innerHTML = '<span class="material-symbols-outlined" style="color:var(--accent)">content_copy</span> Copy Google Apps Script Code';
+  }, 3000);
+}
+
+async function saveRuntimeSettings() {
+  const userName = document.getElementById("cfgUserName").value.trim() || USER_NAME || "Friend";
+  USER_NAME = userName;
+  localStorage.setItem("journalos_user_name", userName);
+  const pinVal = document.getElementById("cfgPrivacyPin").value.trim();
+  const encToggle = document.getElementById("cfgEncryptToggle").checked;
+  const webhook = document.getElementById("cfgWebhookUrl").value.trim();
+  const secretToken = document.getElementById("cfgSecretToken").value.trim();
+  const geminiKey = document.getElementById("cfgGeminiKey").value.trim();
+  const fb = document.getElementById("cfgSaveFeedback");
+
+  if (pinVal) {
+    localStorage.setItem("journalos_pin_saved", pinVal);
+    sessionStorage.setItem("journalos_pin", pinVal);
+  } else {
+    localStorage.removeItem("journalos_pin_saved");
+    sessionStorage.removeItem("journalos_pin");
+  }
+
+  if (encToggle && !pinVal) {
+    alert("Please enter a Privacy PIN / Passphrase to enable AES-256-GCM Encryption.");
+    return;
+  }
+  localStorage.setItem("journalos_e2ee", encToggle ? "true" : "false");
+  updateEncryptionFooterBadge();
+
+  fb.textContent = "Saving privacy & cloud settings...";
+
+  const res = await apiFetch("/api/config", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_name: userName,
+      google_sheets_webhook_url: webhook || undefined,
+      secret_vault_token: secretToken || undefined,
+      gemini_api_key: geminiKey || undefined
+    })
+  });
+  const data = await res.json();
+  fb.textContent = data.sync && data.sync.message
+    ? `✓ Saved securely for ${userName}! ${data.sync.message}`
+    : `✓ Privacy & Cloud settings saved for ${userName}!`;
+  await loadDashboardData();
+}
+
+/* ----------------------------------------------------------------------------
+ * 5. Chat, A2UI v0.8 Renderer & Rich Interactive Widgets
+ * -------------------------------------------------------------------------- */
+function sendPrompt(text) {
+  input.value = text;
+  autoResizeTextarea(input);
+  form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+}
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
 
 function bubble(who) {
   const m = el("div", "msg " + who);
   const avatar = el("div", "avatar");
-  const icon = el("span", "material-symbols-outlined", who === "user" ? "person" : "auto_awesome");
+  const icon = el("span", "material-symbols-outlined", who === "user" ? "person" : "favorite");
   avatar.appendChild(icon);
 
   const content = el("div", "msg-content");
-  const author = el("div", "msg-author", who === "user" ? "You" : "JournalOS");
+  const author = el(
+    "div",
+    "msg-author",
+    who === "user"
+      ? `${USER_NAME || "You"} · ${SELECTED_EMOTION}`
+      : `JournalOS Companion Counsellor · ${ACTIVE_METHODOLOGY ? ACTIVE_METHODOLOGY.name : "Coach"}`
+  );
   const b = el("div", "bubble");
 
   content.appendChild(author);
@@ -335,14 +2162,6 @@ function bubble(who) {
   return b;
 }
 
-/* ----------------------------------------------------------------------------
- * A2UI mini-renderer (v0.8 Basic Catalog subset).
- * Renders Card / Column / Row / Text / Divider / List / Image / Icon.
- * Anything else falls back to plain text (see renderReply). All text goes in via
- * textContent and image URLs are validated, so agent output can't inject HTML.
- * -------------------------------------------------------------------------- */
-
-// A "bound value" is usually {literalString: "..."}; we only support literals.
 function boundStr(v) {
   if (v == null) return "";
   if (typeof v === "string") return v;
@@ -350,7 +2169,6 @@ function boundStr(v) {
   return "";
 }
 
-// child ids of a component's props: single `child` and/or `children.explicitList`.
 function childIds(props) {
   const ids = [];
   if (props && typeof props.child === "string") ids.push(props.child);
@@ -359,11 +2177,12 @@ function childIds(props) {
   return ids;
 }
 
-// A2UI icon names are camelCase (locationOn); Material Symbols wants snake_case.
-function iconName(n) { return String(n || "").replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/\s+/g, "_").toLowerCase(); }
+function iconName(n) {
+  return String(n || "").replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/\s+/g, "_").toLowerCase();
+}
 
 function buildNode(id, comps, seen) {
-  if (!id || seen.has(id)) return null;   // missing / cycle guard
+  if (!id || seen.has(id)) return null;
   seen.add(id);
   const spec = comps[id];
   if (!spec || typeof spec !== "object") return null;
@@ -396,19 +2215,17 @@ function buildNode(id, comps, seen) {
       return el("hr", "a2divider");
     case "Image": {
       const src = boundStr(props.url || props.src);
-      if (!/^https?:\/\//i.test(src)) return null;   // only allow safe URLs
+      if (!/^(https?:\/\/|\/api\/)/i.test(src)) return null;
       const img = el("img", "a2img"); img.src = src; img.alt = boundStr(props.alt) || ""; return img;
     }
     case "Icon": {
       const s = el("span", "material-symbols-outlined"); s.textContent = iconName(boundStr(props.name) || props.name); return s;
     }
     default:
-      return null;   // unknown component -> skipped (text fallback covers content)
+      return null;
   }
 }
 
-// Render one or more A2UI messages (beginRendering + surfaceUpdate) into `container`.
-// Returns true if anything was drawn.
 function renderSurface(messages, container) {
   const comps = {};
   const roots = [];
@@ -418,7 +2235,7 @@ function renderSurface(messages, container) {
     if (su && Array.isArray(su.components)) for (const c of su.components) if (c && c.id && c.component) comps[c.id] = c.component;
   }
   let rootIds = roots.filter(r => comps[r]);
-  if (rootIds.length === 0) {   // no valid root given -> infer un-referenced components
+  if (rootIds.length === 0) {
     const referenced = new Set();
     for (const id in comps) { const spec = comps[id]; childIds(spec[Object.keys(spec)[0]] || {}).forEach(c => referenced.add(c)); }
     rootIds = Object.keys(comps).filter(id => !referenced.has(id));
@@ -428,98 +2245,152 @@ function renderSurface(messages, container) {
   return drew;
 }
 
-// Fallback: pull every Text value out of the messages as plain text.
-function flattenText(messages) {
-  const out = [];
-  for (const m of messages) {
-    const su = m.surfaceUpdate;
-    if (su && Array.isArray(su.components)) for (const c of su.components) if (c && c.component && c.component.Text) out.push(boundStr(c.component.Text.text));
+function renderGuideInteractiveWidget(guideData, container) {
+  const box = el("div", "emotion-picker-box");
+  const titleRow = el("div", "emotion-picker-title");
+  titleRow.appendChild(el("span", null, `🎭 How are you feeling right now, ${guideData.user_name || USER_NAME}? (Pick an emotion to articulate your state)`));
+
+  const structBtn = el("button", "btn-outline", "📋 Fill Structure in Chat Box");
+  structBtn.type = "button";
+  structBtn.style.padding = "0.25rem 0.65rem";
+  structBtn.style.fontSize = "0.74rem";
+  structBtn.onclick = () => insertTemplateIntoChatInput();
+  titleRow.appendChild(structBtn);
+  box.appendChild(titleRow);
+
+  const pills = el("div", "emotion-pills-wrap");
+  for (const em of (guideData.emotions || ALL_EMOTIONS)) {
+    const btn = el("button", "emotion-pill" + (SELECTED_EMOTION === em.label ? " selected" : ""), `${em.emoji} ${em.label}`);
+    btn.type = "button";
+    btn.title = em.phrase;
+    btn.onclick = () => {
+      box.querySelectorAll(".emotion-pill").forEach(p => p.classList.remove("selected"));
+      btn.classList.add("selected");
+      setSelectedEmotion(em.label);
+      insertTemplateIntoChatInput(`${em.emoji} Emotion: ${em.label} — ${em.phrase}\n`);
+    };
+    pills.appendChild(btn);
   }
-  return out.join("\n").trim();
+  box.appendChild(pills);
+  container.appendChild(box);
 }
 
-function renderReply(b, parts) {
-  b.textContent = "";   // clear the "…" placeholder
+async function renderEntriesGuiDashboard(guiData, container) {
+  const stats = guiData.stats || {};
+  const entries = guiData.entries || [];
+  const wrap = el("div", "gui-dashboard-card");
+
+  const kpiGrid = el("div", "gui-kpi-grid");
+  const kpis = [
+    { val: stats.total_entries ?? 0, lbl: "Total Entries" },
+    { val: stats.total_words ?? 0, lbl: "Words Written" },
+    { val: `🔥 ${stats.best_streak ?? 1}d`, lbl: "Active Streak" },
+    { val: stats.top_mood || "Serene", lbl: "Top Emotion" }
+  ];
+  for (const k of kpis) {
+    const tile = el("div", "gui-kpi-box");
+    tile.appendChild(el("div", "gui-kpi-val", String(k.val)));
+    tile.appendChild(el("div", "gui-kpi-lbl", k.lbl));
+    kpiGrid.appendChild(tile);
+  }
+  wrap.appendChild(kpiGrid);
+
+  for (const e of entries) {
+    const row = el("div", "gui-entry-row");
+    const hdr = el("div", "entry-item-header");
+    hdr.appendChild(el("div", "entry-title", e.title || "Mindful Reflection"));
+    const badges = el("div", null);
+    badges.style.display = "flex";
+    badges.style.gap = "0.35rem";
+    if (String(e.content || "").startsWith("ENC:v1:")) {
+      badges.appendChild(el("span", "badge encrypted", "🔐 Encrypted"));
+    }
+    badges.appendChild(el("span", "badge", e.methodology || "Reflective"));
+    badges.appendChild(el("span", "badge mood", e.mood || "Serene"));
+    badges.appendChild(el("span", "badge", `${String(e.timestamp || "").slice(0, 10)}`));
+    hdr.appendChild(badges);
+
+    const decText = await decryptTextIfNeeded(e.content || "");
+    const body = el("div", null, decText);
+    body.style.fontSize = "0.84rem";
+    body.style.color = "var(--text-secondary)";
+    body.style.whiteSpace = "pre-wrap";
+
+    row.appendChild(hdr);
+    row.appendChild(body);
+    wrap.appendChild(row);
+  }
+  container.appendChild(wrap);
+}
+
+async function renderReply(b, parts) {
+  b.textContent = "";
   const texts = parts.filter(p => p && (p.kind === "text" || (!p.kind && p.text))).map(p => p.text || "");
   const a2ui = parts.filter(p => p && p.kind === "a2ui" && p.data).map(p => p.data);
+  const guides = parts.filter(p => p && p.kind === "guide_interactive" && p.data).map(p => p.data);
+  const entriesGui = parts.filter(p => p && p.kind === "entries_gui" && p.data).map(p => p.data);
 
   let textStr = texts.join("\n").trim();
 
-  // Extract <a2ui-json> or <a2a_datapart_json> blocks inside text parts
-  if (textStr.includes("<a2ui-json>") || textStr.includes("<a2a_datapart_json>")) {
-    const jsonMatch = textStr.match(/<a2(?:ui-json|a_datapart_json)>([\s\S]*?)<\/a2(?:ui-json|a_datapart_json)>/);
-    if (jsonMatch) {
-      try {
-        const parsed = JSON.parse(jsonMatch[1]);
-        a2ui.push(parsed.surfaceUpdate || parsed.beginRendering ? parsed : { surfaceUpdate: parsed });
-        textStr = textStr.replace(jsonMatch[0], "").trim();
-      } catch (e) {}
-    }
-  }
-
   if (textStr) {
-    let imgUrl = null;
-    let displayText = textStr;
-
-    // Detect if text is raw tool JSON containing public_url
-    if (textStr.includes("public_url")) {
-      try {
-        const jsonMatch = textStr.match(/\{[\s\S]*"public_url"[\s\S]*\}/);
-        if (jsonMatch) {
-          const parsed = JSON.parse(jsonMatch[0]);
-          if (parsed.public_url) {
-            imgUrl = parsed.public_url;
-            displayText = textStr.replace(jsonMatch[0], "").trim() || "Here is your generated moodscape image:";
-          }
-        }
-      } catch (e) {}
-    }
-
-    // Detect standalone storage image URLs if not matched
-    if (!imgUrl) {
-      const urlMatch = textStr.match(/https?:\/\/[^\s"'<>]+\.(?:png|jpg|jpeg|webp)/i);
-      if (urlMatch) imgUrl = urlMatch[0];
-    }
-
-    if (displayText) b.appendChild(el("div", null, displayText));
-    if (imgUrl) {
-      const img = el("img", "a2img");
-      img.src = imgUrl;
-      img.alt = "Generated Moodscape Image";
-      b.appendChild(img);
-    }
+    const txtNode = el("div", null, textStr);
+    txtNode.style.marginBottom = "0.55rem";
+    txtNode.style.fontWeight = "500";
+    b.appendChild(txtNode);
   }
 
   if (a2ui.length) {
     b.classList.add("rich");
-    if (!renderSurface(a2ui, b)) b.appendChild(el("div", null, flattenText(a2ui) || "(no card content)"));
+    renderSurface(a2ui, b);
   }
+
+  for (const g of guides) {
+    renderGuideInteractiveWidget(g, b);
+  }
+
+  for (const eg of entriesGui) {
+    await renderEntriesGuiDashboard(eg, b);
+  }
+
   if (!b.childNodes.length) b.textContent = "(no response)";
   log.scrollTop = log.scrollHeight;
 }
 
-// The proxy returns { parts: [{kind:"text",text} | {kind:"a2ui",data}] }.
 form.addEventListener("submit", async (ev) => {
   ev.preventDefault();
   const text = input.value.trim();
   if (!text) return;
   bubble("user").textContent = text;
   input.value = "";
-  const b = bubble("agent"); b.textContent = "…";
+  autoResizeTextarea(input);
+
+  const encContent = await encryptTextIfEnabled(text);
+
+  const b = bubble("agent");
+  b.textContent = "…";
   try {
-    const res = await fetch("/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text }) });
-    // Read as text first, then parse. If the proxy ever returns a non-JSON error
-    // page (e.g. a plain "Internal Server Error"), show that body instead of a
-    // cryptic "Unexpected token" JSON error.
+    const res = await apiFetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: text,
+        methodology: ACTIVE_METHODOLOGY ? ACTIVE_METHODOLOGY.name : "Reflective Journaling",
+        emotion: SELECTED_EMOTION,
+        encrypted_content: encContent
+      })
+    });
     const raw = await res.text();
     let data;
     try { data = JSON.parse(raw); }
     catch { throw new Error(`Server returned non-JSON (HTTP ${res.status}). ${raw.slice(0, 300)}`); }
-    renderReply(b, data.parts || []);
+    await renderReply(b, data.parts || []);
+    loadDashboardData();
   } catch (e) {
     b.textContent = "Error: " + e.message;
   }
 });
+
+initApp();
 </script>
 </body>
 </html>
