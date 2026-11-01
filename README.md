@@ -6,7 +6,36 @@
 
 **JournalOS Sanctuary** is a **100% free, open-source, zero-trust privacy-first Mindful AI Journaling Web Application**. Built to act as an empathetic, non-judgmental **Companion Counsellor & Life Coach**, it dynamically guides you across **19 evidence-based journaling methodologies**—backed by your own private **Google Sheet** (or isolated local vault) and **Google AI Studio's free Gemini 2.5 Flash API**.
 
-![JournalOS Demo](assets/demo.gif)
+![JournalOS Animated Demo](assets/demo.gif)
+
+---
+
+## 📸 Latest Application Screenshots (Updated Codebase)
+
+### 1. First-Time Sanctuary Onboarding (Dynamic User Name & Optional Privacy PIN)
+> Welcomes new users on first launch by asking for their preferred name (and optional AES-256-GCM encryption PIN), with zero hardcoded PII in the codebase.
+
+![First-Time Onboarding Setup](assets/screenshot_onboarding.png)
+
+### 2. Companion Counsellor + Uncropped Multi-Line Animated SVG Moodscape
+> Features the 19-Methodology left sidebar with circadian `NOW` badge, structured coaching (`Why this works`, `Reflection Question`, `Meaning`, `Suggested Structure`), full multi-line Animated Moodscape SVG, 10 Nuanced Emotion Pills, and `Shift+Enter` multi-line chat box.
+
+![Companion Coach & Animated Moodscape](assets/screenshot_coach_moodscape.png)
+
+### 3. Interactive "My Entries & Trends" GUI Chronicle
+> Displays visual KPI cards (`Total Entries`, `Words Written`, `Active Streak`, `Top Emotion`) and recent reflections with `AES-256 Encrypted`, methodology, and emotion badges.
+
+![Entries & Trends GUI Dashboard](assets/screenshot_entries_trends.png)
+
+### 4. Insights, Distribution Progress Bars & Google Calendar Reminder Studio
+> Visualizes emotion and framework distributions with live horizontal progress bars, tracks habit streaks and 6-domain long-term memories, and books recurring reminders directly into **Google Calendar** (or `.ics`).
+
+![Insights & Google Calendar Reminder Studio](assets/screenshot_insights_calendar.png)
+
+### 5. Zero-Trust Security, At-Rest Encryption (`VAULT_ENC:v1`) & Redacted Diagnostics
+> Shows persistent encrypted-at-rest API key & Google Sheet status, client-side `AES-256-GCM` encryption toggle, 1-click local vault wipe, and live PII-redacted diagnostics (`[REDACTED_FOR_PRIVACY]`).
+
+![Privacy Settings & Redacted Diagnostics](assets/screenshot_privacy_security.png)
 
 ---
 
@@ -104,14 +133,3 @@ Because a journaling app records deeply personal thoughts and emotional states, 
 cd journalos
 python -m unittest tests/unit/test_dummy.py -v
 ```
-
----
-
-## 🌐 Free Cloud Deployment (Render / Railway / Hugging Face Spaces)
-
-- **Build Command**: `pip install -r journalos/requirements.txt`
-- **Start Command**: `python journalos/frontend/main.py`
-- **Optional Environment Variables**:
-  - `GEMINI_API_KEY`: Free key from [Google AI Studio](https://aistudio.google.com/apikey)
-  - `GOOGLE_SHEETS_WEBHOOK_URL`: Your Google Apps Script Web App URL
-  - `JOURNALOS_MASTER_KEY`: Custom secret passphrase for server-side at-rest config encryption
