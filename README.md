@@ -4,7 +4,7 @@
   <img src="journalos/frontend/static/logo.svg" alt="JournalOS Logo" width="76" height="76">
 </p>
 
-**JournalOS Sanctuary** is a **100% free, open-source, zero-trust privacy-first Mindful AI Journaling Web Application**. Built to act as an empathetic, non-judgmental **Companion Counsellor & Life Coach**, it dynamically guides you across **19 evidence-based journaling methodologies**—backed by your own private **Google Sheet** (or isolated local vault) and **Google AI Studio's free Gemini 2.5 Flash API**.
+**JournalOS Sanctuary** is a **100% free, open-source, privacy-first & encrypted Mindful AI Journaling Web Application**. Built to act as an empathetic, non-judgmental **Companion Counsellor & Life Coach**, it dynamically guides you across **19 evidence-based journaling methodologies**—backed by your own private **Google Sheet** (or isolated local vault) and **Google AI Studio's free Gemini 2.5 Flash API**.
 
 ![JournalOS Animated Demo](assets/demo.gif)
 
@@ -32,7 +32,7 @@
 
 ![Insights & Google Calendar Reminder Studio](assets/screenshot_insights_calendar.png)
 
-### 5. Zero-Trust Security, At-Rest Encryption (`VAULT_ENC:v1`) & Redacted Diagnostics
+### 5. Complete Mental-Health Privacy, At-Rest Encryption (`VAULT_ENC:v1`) & Redacted Diagnostics
 > Shows persistent encrypted-at-rest API key & Google Sheet status, client-side `AES-256-GCM` encryption toggle, 1-click local vault wipe, and live PII-redacted diagnostics (`[REDACTED_FOR_PRIVACY]`).
 
 ![Privacy Settings & Redacted Diagnostics](assets/screenshot_privacy_security.png)
@@ -45,7 +45,7 @@
 - 🧭 **19 Evidence-Based Journaling Methodologies + Circadian `⏰ NOW` Recommendations**: Automatically detects your browser's local time and timezone to recommend the ideal journaling practice for morning, midday, evening, or night.
 - 🎨 **Rate-Limit-Free Animated SVG Moodscapes (`/api/moodscape.svg`)**: Generates living, 60fps breathing visuals with full multi-line reflection questions and meanings—with zero external API rate limits or third-party tracking.
 - 🎭 **Nuanced Emotion Vocabulary**: 10 expressive emotional states with guided reflection phrases to help you articulate complex inner feelings.
-- 🔒 **Zero-Trust Mental-Health Privacy & At-Rest Encryption**:
+- 🔒 **End-to-End Mental-Health Privacy & At-Rest Encryption**:
   - **Client-Side AES-256-GCM Encryption**: Optional PBKDF2 (100,000 iterations) + WebCrypto AES-256-GCM encryption encrypts your journal text *inside your browser* before it ever leaves your device.
   - **Encrypted Local Config & PII at Rest**: User names, API keys, and Google Sheets webhook URLs are encrypted on disk (`VAULT_ENC:v1:...`) using HMAC-SHA256 authenticated encryption.
   - **Per-Browser Cryptographic Vault Isolation**: Each browser gets an isolated vault (`X-JournalOS-Vault-ID`) so users on shared servers never see each other's data.
